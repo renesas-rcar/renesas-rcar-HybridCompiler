@@ -1,0 +1,15 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Round[onnx opset 11], https://pytorch.org/docs/stable/generated/torch.round.html[torch.round].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Round` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** In `torch.round`, the parameter `decimals` only supports `0`(0 is default).

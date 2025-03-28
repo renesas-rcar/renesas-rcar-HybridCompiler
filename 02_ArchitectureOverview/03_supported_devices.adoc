@@ -1,0 +1,8 @@
+== Supported Devices
+
+[options="header"]
+|===
+| https://www.renesas.com/en/products/automotive-products/automotive-system-chips-socs[R-Car] Series Lineup | Version
+| https://www.renesas.com/en/products/automotive-products/automotive-system-chips-socs/r-car-v4h-best-class-deep-learning-very-low-power-system-chip-automated-driving-level-2level-3[V4H] | 2
+| V4M | 1
+|===

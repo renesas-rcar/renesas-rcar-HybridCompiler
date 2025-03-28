@@ -1,0 +1,17 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Sum[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.sum.html[torch.sum].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Sum` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** `DKL` can only support up to 10 inputs per kernel. `TVM` can support more than 10 inputs by decomposing it to several `DKL` kernels.
+** FP32 operator only verified with stand-alone test case.

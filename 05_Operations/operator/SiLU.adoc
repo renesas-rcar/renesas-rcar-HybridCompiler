@@ -1,0 +1,14 @@
+HyCo supports https://pytorch.org/docs/stable/generated/torch.nn.SiLU.html[torch.nn.SiLU].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `SiLU` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

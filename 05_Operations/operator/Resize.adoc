@@ -1,0 +1,41 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Resize[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.UpsamplingBilinear2d.html[torch.nn.UpsamplingBilinear2d], {url_pt}torch.nn.UpsamplingNearest2d.html[torch.nn.UpsamplingNearest2d].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|mode |UpsampleMode |NN, LINEAR |interpolation mode.
+|coordinate_transformation_mode |ResizeCoordinateTransformationMode a| HALF_PIXEL, +
+ASYMMETRIC, +
+PYTORCH_HALF_PIXEL, +
+ALIGN_CORNERS, +
+TF_CROP_AND_RESIZE |Specify how to transform the coordinate in the resized tensor to the coordinate in the original tensor.
+|nearest_mode |ResizeNearestMode a| ROUND_PREFER_FLOOR, +
+ROUND_PREFER_CEIL, +
+FLOOR, +
+CEIL |Specify index rounding in NEAREST mode.
+|exclude_outside |uint8 |0, 1 |If set to 1, the weight of sampling locations outside the tensor will be set to 0 and the weight will be renormalized so that their sum is 1.0.
+|cubic_coeff_a |float | |The coefficient 'a' used in cubic interpolation.
+|extrapolation_value |float | |When coordinate_transformation_mode is "tf_crop_and_resize" and x_original is outside the range [0, length_original - 1], this value is used as the corresponding output value. Default is 0.0f.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** Limited to nearest neighbor and integer scaling sizes essentially <= 6 or 8, or `linear interpolation` with (x, y) equal integer scaling size <= 5 for `TVM`.
+** Supported with following limitations.
+*** `scale`: 2, 4, 8 (nearest only)
+*** `mode`: nearest, linear
+*** supported 8bit input -> 8bit output.
+*** cannot support unequal integers(e.g. 2x3).
+
+* DSP
+** Supported input tensor dimension: 4.
+** Supported output tensor dimension: 4.
+** If the following condition(s) are not satisfied, then fallback to the reference implementation.
+*** If inputs or outputs are non-dense.
+*** `mode`: CUBIC
+*** `coordinate_transformation_mode`: TF_CROP_AND_RESIZE

@@ -1,0 +1,28 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Add[onnx opset 14], https://pytorch.org/docs/stable/generated/torch.add.html[torch.add]
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** CNNIP supports the `Add` operator as the Elementwise (SUM) layer.
+** Coefficients for inputs can be adjusted by weights and shifter.
+** Supported with following limitations.
+*** 2 inputs and 1 output case.
+*** Layer combination.
+**** Convolution + Convolution
+**** Elementwise (SUM) + Convolution
+**** Resize (Bilinear) + Elementwise (SUM)
+*** supported 8bit input -> 8bit output.
+*** supported only when 2 input types are same.
+
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Elementwise and scalar broadcast only supported.
+** FP32 operator only verified with stand-alone test case.

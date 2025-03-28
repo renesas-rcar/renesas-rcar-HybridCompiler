@@ -1,0 +1,62 @@
+= Reducing runtime overhead through WUP/SLP
+WUP/SLP is a mechanism for inter-module synchronization inside the IMP system. TVM can leverage the WUP/SLP mechanism to reduce the runtime overhead of model execution.
+
+== Model execution: CPU control
+This is the traditional method of model execution. In this method, the model is divided into DSP and CNN-IP subgraphs, and the subgraphs are executed sequentially by the TVM Runtime.
+
+```mermaid
+sequenceDiagram
+    participant T as TVM_RT
+    participant D as DSP
+    participant C as CNN-IP
+    T->>+D: "subgraph 1"
+    Note left of D: DSP
+    D->>-T: return
+    T->>+C: "subgraph 2"
+    Note left of C: CNN-IP
+    C->>-T: return
+    T->>+D: "subgraph 3"
+    Note left of D: DSP
+    D->>-T: return
+```
+
+Each time the TVM runtime executes a DSP or CNN-IP subgraph, there's overhead associated with starting the module and transferring control to/from the module. This also involves several context switches in the OS which has a noticeable and non-deterministic overhead.
+
+== Model execution: WUP/SLP
+In this method, model execution is started by the TVM runtime, and control doesn't return to the CPU until the end. All intermediate communication between DSP and CNN-IP happens internally through WUP/SLP.
+
+
+```mermaid
+sequenceDiagram
+    participant T as TVM_RT
+    participant D as DSP
+    participant C as CNN-IP
+    T->>+D: "subgraph 1"
+    Note left of D: DSP
+    D->>+C: WUP
+    deactivate D
+    Note left of C: CNN-IP
+    C->>-D: WUP
+    activate D
+    Note left of D: DSP
+    D->>-T: return
+```
+
+== Using WUP/SLP
+
+WUP/SLP use can be enabled through the use of a different partition function as illustrated below:
+
+[source,python]
+----
+with tvm.transform.PassContext(opt_level=3):
+    mod = relay.transform.FakeQuantizationToInteger()(mod)
+    if enable_wupslp:
+        from relay.op.contrib.rcar import partition_for_rcar
+        mod = partition_for_rcar(mod)
+    else:
+        from relay.op.contrib.rcar_imp import partition_for_rcar_imp
+        from relay.op.contrib.rcardkl import partition_for_rcardkl
+        mod = partition_for_rcar_imp(mod)
+        mod = partition_for_rcardkl(mod)
+    lib = relay.build(mod, target=[...])
+----

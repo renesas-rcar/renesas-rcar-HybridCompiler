@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Mul[onnx opset 14], https://pytorch.org/docs/stable/generated/torch.mul.html[torch.mul].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** CNNIP supports the `Mul` operator as the `Elementwise (PRODUCT) layer`.
+** `Coefficients for inputs` can be adjusted by `weights` and `shifter`.
+** supported 8bit input -> 8bit output.
+** supported only when 2 input types are same.
+** uint8 is not supported in the broadcast case.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** `Elementwise` and `scalar broadcast` only supported.
+** FP32 operator only verified with stand-alone test case.

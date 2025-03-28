@@ -1,0 +1,3 @@
+ParameterName,Data Type,Default Value,Descriptions
+BiasOverflowPreventionAll,bool,"""true""","If true, bias overflow prevention technique is enabled for all nodes."
+BiasOverflowPreventionNodes,list of strings,None,"If the node's name is in this list, bias overflow prevention is enabled for that node."

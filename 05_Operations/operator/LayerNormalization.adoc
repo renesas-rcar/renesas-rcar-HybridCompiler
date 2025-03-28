@@ -1,0 +1,23 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#LayerNormalization[onnx opset 17], https://pytorch.org/docs/stable/generated/torch.nn.LayerNorm.html[torch.nn.LayerNorm].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 |[0, r-1] |The first normalization dimension. If rank(X) is r, axis’ allowed range is [-r, r).
+|epsilon |float |greater than 0. |The epsilon value to use to avoid division by zero.
+|stash_type |uint8 |Only 10 (float) is supported. |Type of Mean and InvStdDev. This also specifies stage one’s computation precision.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `LayerNormalization` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Simplify Inference converts to `Mul+Add` for `TVM`.

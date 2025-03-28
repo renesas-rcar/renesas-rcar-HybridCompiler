@@ -1,0 +1,19 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Elu[onnx opset 6], https://pytorch.org/docs/stable/generated/torch.nn.ELU.html[torch.nn.ELU].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float | |Value of alpha.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Elu` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

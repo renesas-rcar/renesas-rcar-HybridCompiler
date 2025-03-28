@@ -1,0 +1,21 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Softmax[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html[torch.nn.Softmax].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 |[0, r-1] |where r = rank(input).
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Softmax` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case.

@@ -1,0 +1,26 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ScatterElements[onnx opset 16].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |int8 |[0, r-1] |where r = rank(input).
+|reduction |ReductionMode a| NONE = 0, +
+ADD = 1, +
+MUL = 2 |mode.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ScatterElements` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** The reference / optimized implementation does not support non-dense input and output tensors.
+** The indices dimension must be equal to the input dimension.
+** The updates shape must be equal to the indices shape.
+** The output shape must be equal to the data shape.

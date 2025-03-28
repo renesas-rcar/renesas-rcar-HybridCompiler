@@ -1,0 +1,16 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Max[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.maximum.html[torch.maximum].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Max` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+**`Maximum of 10 inputs` are supported by DKL. More than 10 inputs are supported by `TVM`.
+** FP32 operator only verified with stand-alone test case.

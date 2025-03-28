@@ -1,0 +1,19 @@
+== When using MMCVDeformConv2d
+
+Because `MMCVDeformConv2d` is not defined at https://github.com/onnx/onnx/blob/v1.13.1/docs/Operators.md, following steps are required.
+
+* The `MMCVDeformConv layer` in the ONNX file must have `domain="mmdeploy"` set.
+* Call rcar_quantize_static_v4x_tvm with `extra_options` as below:
+** `libmmdeploy_onnxruntime_ops_ubuntu2004.so` can be found in `rcar-ort-quantizer/lib/`.
+** Only `libmmdeploy_onnxruntime_ops_ubuntu2004.so` needs to be specified as an argument, but all `.so` files in `rcar-ort-quantizer/lib/` are required for execution.
+
+[source,python]
+----
+rcar_quantize_static_v4x_tvm(
+    "/path/to/fp32.onnx", 
+    "/path/to/quant.onnx", 
+    calibration_datareader,
+    extra_options={"custom_operator_lib": "/path/to/libmmdeploy_onnxruntime_ops_ubuntu2004.so"},
+    ...
+)
+----

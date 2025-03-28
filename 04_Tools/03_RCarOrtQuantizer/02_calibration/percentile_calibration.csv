@@ -1,0 +1,6 @@
+ParameterName,Data Type,Default Value,Descriptions
+CalibPercentile,float,99.999,constant to determine what percentage of tensor range to treat as a range of floating-point values.
+CalibNumBins,int,2048,constant to specify the number of bins for the calibration methods that creates histograms.
+CalibDatasetStride,int,None,"constant to divide dataset to save the memory usage. If None, this is ignored."
+CalibSaveHistogram,str,None,"path to save the histogram data. If None, this is ignored."
+CalibLoadHistogram,str,None,"path to load the histogram data. If None, this is ignored."

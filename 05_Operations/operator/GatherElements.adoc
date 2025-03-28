@@ -1,0 +1,25 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#GatherElements[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.gather.html[torch.gather].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 |[0, r-1] |where r = rank(data).
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `GatherElements` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** if inputs or outputs are non-dense, then fallback to the reference implementation.
+** `indices` must have same shape as `data`, except at dimension `axis` for `TVM`.
+** The implementation does not support non-dense input and output tensors. The implementation does not support int64 indices.
+** The optimized implementation does not support cases where:
+*** `data_shape[i] != indices_shape[i]` for `i != axis`. +
+Fallback to the reference implementation.

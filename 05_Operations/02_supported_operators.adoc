@@ -1,0 +1,148 @@
+= Table of supported operators
+
+The Hybrid Compiler (hereafter HyCo) supports ONNX operators (up to `Opset 17`), and Pytorch operators in the table below.
+
+Latest information:
+
+* ONNX operators can be found https://github.com/onnx/onnx/blob/main/docs/Operators.md[here].
+* pytorch operators can be found https://pytorch.org/docs/stable/torch.html[here] or https://pytorch.org/docs/stable/nn.html[here].
+
+"*fp32*" is float type, "*○*" is supported, and "*x*" is not supported. Also, whether it is "*int8*" or "*bool*" depends on the operator specification.
+`Operator` is a link to the individual operator description. In addition, the "*Operator*" in the Table is based on ONNX. Please refer to the sections for each operator for the related pytorch operator.
+
+.Supported Operators
+[width="100%", cols="^.^5%,^.^26%,^9%,^9%,^10%,^10%,^10%,^10%", options="header"]
+|===
+| No | Operator 2+| Frontend +
+[onnx / pytorch] 2+| CNNIP +
+[int8 / int16] 2+| DSP +
+[int8(bool) / fp32]
+| 1 | xref:operator/Abs.adoc[Abs] | ○ | ○ | x | x | ○ | x
+| 2 | xref:operator/Acos.adoc[Acos] | ○ | ○ | x | x | ○ | x
+| 3 | xref:operator/Acosh.adoc[Acosh] | ○ | ○ | x | x | ○ | x
+| 4 | xref:operator/Add.adoc[Add] | ○ | ○ | ○ | ○ | ○ | x
+| 5 | xref:operator/And.adoc[And] | ○ | ○ | x | x | ○ | x
+| 6 | xref:operator/ArgMax.adoc[ArgMax] | ○ | ○ | ○ | ○ | ○ | x
+| 7 | xref:operator/ArgMin.adoc[ArgMin] | ○ | ○ | x | x | ○ | x
+| 8 | xref:operator/Asin.adoc[Asin] | ○ | ○ | x | x | ○ | x
+| 9 | xref:operator/Asinh.adoc[Asinh] | ○ | ○ | x | x | ○ | x
+| 10 | xref:operator/Atan.adoc[Atan] | ○ | ○ | x | x | ○ | x
+| 11 | xref:operator/Atanh.adoc[Atanh] | ○ | ○ | x | x | ○ | x
+| 12 | xref:operator/AveragePool.adoc[AveragePool] | ○ | ○ | ○ | ○ | ○ | x
+| 13 | xref:operator/BatchNormalization.adoc[BatchNormalization] | ○ | ○ | x | x | ○ | x
+| 14 | xref:operator/Cast.adoc[Cast] | ○ | ○ | x | x | ○ | x
+| 15 | xref:operator/Ceil.adoc[Ceil] | ○ | ○ | x | x | ○ | x
+| 16 | xref:operator/Celu.adoc[Celu] | ○ | ○ | x | x | ○ | x
+| 17 | xref:operator/Clamp.adoc[Clamp] | x | ○ | x | x | ○ | x
+| 18 | xref:operator/ClampMax.adoc[ClampMax] | x | ○ | x | x | ○ | x
+| 19 | xref:operator/ClampMin.adoc[ClampMin] | x | ○ | x | x | ○ | x
+| 20 | xref:operator/Clip.adoc[Clip] | ○ | ○ | ○ | x | ○ | x
+| 21 | xref:operator/Concat.adoc[Concat] | ○ | ○ | ○ | ○ | ○ | x
+| 22 | xref:operator/Conv.adoc[Conv] | ○ | ○ | ○ | ○  | ○ | x
+| 23 | xref:operator/ConvTranspose.adoc[ConvTranspose] | ○ | ○ | ○ | ○ | x | x
+| 24 | xref:operator/Cos.adoc[Cos] | ○ | ○ | x | x | ○ | x
+| 25 | xref:operator/Cosh.adoc[Cosh] | ○ | ○ | x | x | ○ | x
+| 26 | xref:operator/CrossEntropyLoss.adoc[CrossEntropyLoss] | x | ○ | x | x | ○ | x
+| 27 | xref:operator/CumSum.adoc[CumSum] | ○ | ○ | x | x | ○ | x
+| 28 | xref:operator/DeformConv.adoc[DeformConv] | ○ | x | x | x | ○ | x
+| 29 | xref:operator/DequantizeLinear.adoc[DequantizeLinear] | ○ | ○ | x | x | ○ | x
+| 30 | xref:operator/DetectionOutput.adoc[DetectionOutput] | ○ | x | x | x | ○ | x
+| 31 | xref:operator/Div.adoc[Div] | ○ | ○ | x | x | ○ | x
+| 32 | xref:operator/Dropout.adoc[Dropout] | ○ | ○ | x | x | ○ | x
+| 33 | xref:operator/EinSum.adoc[EinSum] | ○ | x | x | x | ○ | x
+| 34 | xref:operator/Elu.adoc[Elu] | ○ | ○ | x | x | ○ | x
+| 35 | xref:operator/Equal.adoc[Equal] | ○ | ○ | x | x | ○ | x
+| 36 | xref:operator/Erf.adoc[Erf] | ○ | ○ | x | x | ○ | x
+| 37 | xref:operator/Exp.adoc[Exp] | ○ | ○ | x | x | ○ | x
+| 38 | xref:operator/Expand.adoc[Expand] | ○ | ○ | x | x | ○ | x
+| 39 | xref:operator/Flatten.adoc[Flatten] | ○ | ○ | x | x | ○ | x
+| 40 | xref:operator/Floor.adoc[Floor] | ○ | ○ | x | x | ○ | x
+| 41 | xref:operator/FloorDivide.adoc[FloorDivide] | x | ○ | x | x | ○ | x
+| 42 | xref:operator/Gather.adoc[Gather] | ○ | x | x | x | ○ | x
+| 43 | xref:operator/GatherElements.adoc[GatherElements] | ○ | ○ | x | x | ○ | x
+| 44 | xref:operator/GatherND.adoc[GatherND] | ○ | x | x | x | ○ | x
+| 45 | xref:operator/Gelu.adoc[Gelu] | ○ | ○ | x | x | ○ | x
+| 46 | xref:operator/Gemm.adoc[Gemm] | ○ | ○ | x | x | ○ | x
+| 47 | xref:operator/GlobalAveragePool.adoc[GlobalAveragePool] | ○ | ○ | ○ | ○ | ○ | x
+| 48 | xref:operator/GlobalMaxPool.adoc[GlobalMaxPool] | ○ | ○ | x | x | ○ | x
+| 49 | xref:operator/Greater.adoc[Greater] | ○ | ○ | x | x | ○ | x
+| 50 | xref:operator/GreaterOrEqual.adoc[GreaterOrEqual] | ○ | ○ | x | x | ○ | x
+| 51 | xref:operator/GridSample.adoc[GridSample] | ○ | ○ | x | x | ○ | x
+| 52 | xref:operator/GroupNormalization.adoc[GroupNormalization] | ○ | ○ | x | x | ○ | x
+| 53 | xref:operator/HardSigmoid.adoc[HardSigmoid] | ○ | ○ | x | x | ○ | x
+| 54 | xref:operator/HardSwish.adoc[HardSwish] | ○ | ○ | x | x | ○ | x
+| 55 | xref:operator/Hardmax.adoc[Hardmax] | ○ | x | x | x | ○ | x
+| 56 | xref:operator/Identity.adoc[Identity] | ○ | ○ | x | x | ○ | x
+| 57 | xref:operator/InstanceNormalization.adoc[InstanceNormalization] | ○ | ○ | x | x | ○ | x
+| 58 | xref:operator/IsInf.adoc[IsInf] | ○ | x | x | x | x | x
+| 59 | xref:operator/IsNaN.adoc[IsNaN] | ○ | x | x | x | x | x
+| 60 | xref:operator/L1Loss.adoc[L1Loss] | x | ○ | x | x | ○ | x
+| 61 | xref:operator/LRN.adoc[LRN] | ○ | x | x | x | ○ | x
+| 62 | xref:operator/LayerNormalization.adoc[LayerNormalization] | ○ | ○ | x | x | ○ | x
+| 63 | xref:operator/LeakyRelu.adoc[LeakyRelu] | ○ | ○ | ○ | ○ | x | x
+| 64 | xref:operator/Less.adoc[Less] | ○ | ○ | x | x | ○ | x
+| 65 | xref:operator/LessOrEqual.adoc[LessOrEqual] | ○ | ○ | x | x | ○ | x
+| 66 | xref:operator/Log.adoc[Log] | ○ | ○ | x | x | ○ | x
+| 67 | xref:operator/LogSoftmax.adoc[LogSoftmax] | ○ | ○ | x | x | ○ | x
+| 68 | xref:operator/LpNormalization.adoc[LpNormalization] | ○ | x | x | x | x | x
+| 69 | xref:operator/MatMul.adoc[MatMul] | ○ | ○ | x | x | ○ | x
+| 70 | xref:operator/Max.adoc[Max] | ○ | ○ | x | x | ○ | x
+| 71 | xref:operator/MaxPool.adoc[MaxPool] | ○ | ○ | ○ | x | ○ | x
+| 72 | xref:operator/Mean.adoc[Mean] | ○ | ○ | x | x | ○ | x
+| 73 | xref:operator/Min.adoc[Min] | ○ | ○ | x | x | ○ | x
+| 74 | xref:operator/Mish.adoc[Mish] | ○ | ○ | x | x | ○ | x
+| 75 | xref:operator/Mod.adoc[Mod] | ○ | ○ | x | x | ○ | x
+| 76 | xref:operator/Mul.adoc[Mul] | ○ | ○ | ○ | ○ | ○ | x
+| 77 | xref:operator/Neg.adoc[Neg] | ○ | ○ | x | x | ○ | x
+| 78 | xref:operator/NonMaxSuppression.adoc[NonMaxSuppression] | ○ | x | x | x | ○ | x
+| 79 | xref:operator/Not.adoc[Not] | ○ | ○ | x | x | ○ | x
+| 80 | xref:operator/Or.adoc[Or] | ○ | ○ | x | x | ○ | x
+| 81 | xref:operator/PRelu.adoc[PRelu] | ○ | x | x | x | ○ | x
+| 82 | xref:operator/Pad.adoc[Pad] | ○ | ○ | x | x | ○ | x
+| 83 | xref:operator/Pow.adoc[Pow] | ○ | ○ | x | x | ○ | x
+| 84 | xref:operator/QuantizeLinear.adoc[QuantizeLinear] | ○ | ○ | x | x | ○ | x
+| 85 | xref:operator/ReduceL1.adoc[ReduceL1] | ○ | x | x | x | ○ | x
+| 86 | xref:operator/ReduceL2.adoc[ReduceL2] | ○ | ○ | x | x | ○ | x
+| 87 | xref:operator/ReduceLogSum.adoc[ReduceLogSum] | ○ | x | x | x | ○ | x
+| 88 | xref:operator/ReduceLogSumExp.adoc[ReduceLogSumExp] | ○ | x | x | x | ○ | x
+| 89 | xref:operator/ReduceMax.adoc[ReduceMax] | ○ | ○ | x | x | ○ | x
+| 90 | xref:operator/ReduceMean.adoc[ReduceMean] | ○ | x | ○ | x | ○ | x
+| 91 | xref:operator/ReduceMin.adoc[ReduceMin] | ○ | x | x | x | ○ | x
+| 92 | xref:operator/ReduceProd.adoc[ReduceProd] | ○ | ○ | x | x | ○ | x
+| 93 | xref:operator/ReduceSum.adoc[ReduceSum] | ○ | ○ | x | x | ○ | x
+| 94 | xref:operator/ReduceSumSquare.adoc[ReduceSumSquare] | ○ | x | x | x | ○ | x
+| 95 | xref:operator/Relu.adoc[Relu] | ○ | ○ | ○ | ○ | ○ | x
+| 96 | xref:operator/Reshape.adoc[Reshape] | ○ | ○ | ○ | x | ○ | x
+| 97 | xref:operator/Resize.adoc[Resize] | ○ | ○ | ○ | ○ | ○ | x
+| 98 | xref:operator/RoiAlign.adoc[RoiAlign] | ○ | x | x | x | x | x
+| 99 | xref:operator/Roll.adoc[Roll] | x | ○ | x | x | ○ | x
+| 100 | xref:operator/Round.adoc[Round] | ○ | ○ | x | x | ○ | x
+| 101 | xref:operator/ScatterElements.adoc[ScatterElements] | ○ | x | x | x | ○ | x
+| 102 | xref:operator/ScatterND.adoc[ScatterND] | ○ | x | x | x | ○ | x
+| 103 | xref:operator/Selu.adoc[Selu] | ○ | ○ | x | x | ○ | x
+| 104 | xref:operator/Shape.adoc[Shape] | ○ | ○ | x | x | ○ | x
+| 105 | xref:operator/SiLU.adoc[SiLU] | x | ○ | x | x | ○ | x
+| 106 | xref:operator/Sigmoid.adoc[Sigmoid] | ○ | ○ | ○ | ○ | ○ | x
+| 107 | xref:operator/Sign.adoc[Sign] | ○ | ○ | x | x | ○ | x
+| 108 | xref:operator/Sin.adoc[Sin] | ○ | ○ | x | x | ○ | x
+| 109 | xref:operator/Sinh.adoc[Sinh] | ○ | ○ | x | x | ○ | x
+| 110 | xref:operator/Slice.adoc[Slice] | ○ | x | x | x | ○ | x
+| 111 | xref:operator/Softmax.adoc[Softmax] | ○ | ○ | x | x | ○ | x
+| 112 | xref:operator/Softplus.adoc[Softplus] | ○ | ○ | x | x | ○ | x
+| 113 | xref:operator/Softsign.adoc[Softsign] | ○ | ○ | x | x | ○ | x
+| 114 | xref:operator/Split.adoc[Split] | ○ | ○ | x | x | ○ | x
+| 115 | xref:operator/Sqrt.adoc[Sqrt] | ○ | ○ | x | x | ○ | x
+| 116 | xref:operator/Squeeze.adoc[Squeeze] | ○ | ○ | x | x | ○ | x
+| 117 | xref:operator/Sub.adoc[Sub] | ○ | ○ | x | x | ○ | x
+| 118 | xref:operator/Sum.adoc[Sum] | ○ | x | x | x | ○ | x
+| 119 | xref:operator/Tan.adoc[Tan] | ○ | ○ | x | x | ○ | x
+| 120 | xref:operator/Tanh.adoc[Tanh] | ○ | ○ | ○ | ○ | ○ | x
+| 121 | xref:operator/ThresholdedRelu.adoc[ThresholdedRelu] | ○ | x | x | x | ○ | x
+| 122 | xref:operator/Tile.adoc[Tile] | ○ | ○ | x | x | ○ | x
+| 123 | xref:operator/TopK.adoc[TopK] | ○ | ○ | x | x | ○ | x
+| 124 | xref:operator/Transpose.adoc[Transpose] | ○ | ○ | x | x | ○ | x
+| 125 | xref:operator/Unsqueeze.adoc[Unsqueeze] | ○ | ○ | x | x | ○ | x
+| 126 | xref:operator/Where.adoc[Where] | ○ | ○ | x | x | ○ | x
+| 127 | xref:operator/Xor.adoc[Xor] | ○ | ○ | x | x | ○ | x
+| 128 | xref:operator/ZerosLike.adoc[ZerosLike] | x | ○ | x | x | ○ | x
+|===

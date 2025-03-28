@@ -1,0 +1,14 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Tanh[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.tanh.html[torch.tanh].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

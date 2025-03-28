@@ -1,0 +1,15 @@
+HyCo supports NonMaxSuppression(custom nodes).
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `NonMaxSuppression` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.

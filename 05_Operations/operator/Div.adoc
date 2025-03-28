@@ -1,0 +1,17 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Div[onnx opset 14], https://pytorch.org/docs/stable/generated/torch.div.html[torch.div].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Div` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case.
+** In `torch.div`, FP32 is not yet supported.

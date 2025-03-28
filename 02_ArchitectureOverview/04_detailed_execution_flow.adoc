@@ -1,0 +1,3 @@
+== Exhaustive execution types and flow
+
+image:images/exhaustive_execution_types_and_flow.png[A lower level representation of the execution flow in Reaction]

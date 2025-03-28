@@ -1,0 +1,37 @@
+= X5H-NAS
+
+== Overview
+X5H-NAS is a tool to search suitable networks for R-Car X5H. It offers the following features:
+
+- Enable Hardware-aware neural architecture search
+- Latency-constrained optimization
+  * Search for the best model within the latency constraints, rather than searching for the one that take into account latency and accuracy
+- High extensibility
+  * Built on https://github.com/open-mmlab/mmrazor[open-mmlab/mmrazor], making it easy to extend and customize.
+
+X5H-NAS compares accuracy with float32, so it doesn't account for quantization and sparsity.
+
+== X5H-NAS WorkFlow
+X5H-NAS consists of the following three steps. Please refer to the quick start section below for detailed instructions.
+
+Step1： Executing the Training Step
+(Reference) https://mmrazor.readthedocs.io/en/main/user_guides/2_train_different_types_algorithms.html#supernet-pre-training[Supernet Pre-training]
+
+Step2： Executing the Search Step
+(Reference) https://mmrazor.readthedocs.io/en/main/user_guides/2_train_different_types_algorithms.html#search-for-subnet-on-the-trained-supernet[Search for Subnet on The Trained Supernet]
+
+Step3： Executing the Re-Training Step
+(Reference) https://mmrazor.readthedocs.io/en/main/user_guides/2_train_different_types_algorithms.html#subnet-retraining[Subnet Retraining]
+
+== Supported tasks
+X5H-NAS supports following tasks:
+
+- Classification
+- Semantic Segmentation
+- Object Detection
+
+== Quick start
+
+This section provides a guide to running classification NAS for X5H using a pre-configured setup.
+
+Details：link:03_quick_start.md[Quick start].

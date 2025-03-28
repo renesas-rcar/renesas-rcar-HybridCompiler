@@ -1,0 +1,37 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#AveragePool[onnx opset 11], https://pytorch.org/docs/stable/generated/torch.nn.AvgPool2d.html[torch.nn.AvgPool2d].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|auto_pad |AutoPad |NOTSET |Specify padding mode.
+|ceil_mode |uint8 |0, 1 |Whether to use ceil or floor to compute the output shape.
+|count_include_pad |uint8 |0, 1 |Whether include pad pixels when calculating values for the edges.
+|kernel_shape [5] |uint8 | |The size of the kernel along each axis.
+|Pads [10] |uint8 | |Padding for the beginning and ending along each spatial axis.
+|Strides [5] |uint8 | |Stride along each spatial axis.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** Limited to `pool_size < 5` and `padding < 3`, where `strides == pool_size`
+for `TVM`.
+** supported 8bit only.
+*** `kernel size`: 1 to 3.
+*** `No padding`.
+*** `stride`: 1 to 4. (supported for stride == kernel size only).
+*** `supported V4H2`: kernel_h = kernel_w
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Only kernel dimensions 1, 2, and 3 are supported.
+** If the following condition(s) are not satisfied, then fallback to the reference implementation.
+*** The input tensor dimension: 4.
+** Regarding torch operator, `torch.nn.AvgPool2d` is supported.
+*** The input tensor dimension is only 4.

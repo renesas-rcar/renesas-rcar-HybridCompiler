@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Gather[onnx opset 13].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |Uint32 |[0, r-1] |where r = rank(data).
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Gather` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The output tensor of `rank (r + q - 1)` where `r = rank(data)`, `q = rank(indices)`.
+** FP32 operator only verified with stand-alone test case.

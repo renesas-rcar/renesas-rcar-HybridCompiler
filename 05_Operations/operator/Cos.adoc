@@ -1,0 +1,14 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Cos[onnx opset 7], https://pytorch.org/docs/stable/generated/torch.cos.html[torch.cos].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Cos` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

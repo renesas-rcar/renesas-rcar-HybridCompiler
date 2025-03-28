@@ -1,0 +1,18 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Tile[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.Tensor.repeat.html[torch.Tensor.repeat].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Tile` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The repeats must be greater than zero.
+** The output shape must be equal to `the input shape * repeats`.
+** FP32 operator only verified with stand-alone test case.

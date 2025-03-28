@@ -1,0 +1,16 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Unsqueeze[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.unsqueeze.html[torch.unsqueeze].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Unsqueeze` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case. This operator will be removed by `TVM` inference for latency improvement, because this is a memory operator.

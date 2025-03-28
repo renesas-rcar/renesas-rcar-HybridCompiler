@@ -1,0 +1,77 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Conv[onnx opset 11], https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html[nn.Conv2d].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^10%,^.^15%,.^65%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|auto_pad |AutoPad |NOTSET | |Dilations [5] |uint32 | |dilation value along each spatial axis of the filter.
+|group |uint32 | |number of groups input channels and output channels are divided into.
+|kernel_shape [5] |uint32 | |The shape of the convolution kernel.
+|Pads [10] |uint32 | |Padding for the beginning and ending along each spatial axis.
+|Strides [5] |uint32 | |Stride along each spatial axis.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** Supported with following limitations.
+*** H/W limitations.
+**** `kernel size`: 1 to 5.
+**** `stride`: 1 to 3.
+**** `padding`: 0 to 16 (x-direction), 0 to 7 (y-direction)
+**** `dilation`: 1 to 4. (x-direction only)
+*** Normal Convolution supported with following limitations.
+**** Only support `conv kernel` 1x1, 3x3, 5x5, 1x3, 3x1, 1x5, 5x1.
+*** Conv `stride` 1 to 3, for `conv kernel` 1x1 is supported.
+*** `Depthwise` Convolution is supported. Supported with following limitations.
+**** `kernel size`: 1x1, 3x3, 5x5, 1x3, 3x1, 1x5, 5x1.
+**** `stride`: 1 to 3.
+**** `padding`: 0 to 2.
+*** `Dilation` is not supported yet.
+*** `Group convolution` is supported.
+*** `Asymmetric conv stride` is supported.
+*** `Large convolution kernel (by 10x10)` is not supported yet.
+*** 8bit supported.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Only `conv1d, conv2d, conv3d` are supported. Bias (an optional input in ONNX) is mandatory by DKL.
+** Limited to `stride <= 4`, `padding <= 7`, `dilation = 1` for `TVM`.
+** The weight tensor must be per-channel quantized.
+** This function has several cases where faster implementations are used if specific conditions are met. Those cases are as follows:
+*** Depthwise Convolution with large dilations
+**** The number of groups must be equal to the number of input and output channels (Depthwise Convolution).
+**** All `strides` must be 1.
+**** All `kernel size` must be 3.
+**** All `padding` must be equal to the dilations of the corresponding dimension.
+**** All `dilation` must be less than the input shapes of the corresponding dimension.
+**** The sum of the following values must fit into the size of the working memory in bytes, where ceil64 is a function that rounds up to the nearest multiple of 64:
+***** 4 * ceil64((2 * dilation_h + 1) * in_width)
+***** 10 * ceil64(out_width)
+***** 640
+*** Convolution with large dilations
+**** The number of groups must be 1 (standard convolution).
+**** All strides must be 1.
+**** All kernel sizes must be 3.
+**** All padding must be equal to the dilations of the corresponding dimension.
+**** All dilations must be less than the input shapes of the corresponding dimension.
+**** The sum of the following values must fit into the size of the working memory in bytes, where ceil64 is a function that rounds up to the nearest multiple of 64:
+***** 4 * ceil64((2 * dilation_h + 1) * in_width)
+***** 9 * ceil64(out_width)
+***** 1024
+*** Convolution with large strides
+**** The number of groups must be 1 (standard convolution).
+**** All dilations must be 1.
+**** All kernel sizes must be 8.
+**** All strides must be equal to the kernel sizes of the corresponding dimension.
+**** There must be no padding.
+**** The sum of the following values must fit into the size of the working memory in bytes, where ceil64 is a function that rounds up to the nearest multiple of 64:
+***** 12 * ceil64(8 * out_width)
+***** ceil64(out_width)
+***** 1536
+** FP32 operator only verified with stand-alone test case.

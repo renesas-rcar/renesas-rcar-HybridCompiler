@@ -1,0 +1,4 @@
+= Operations
+
+* xref:02_supported_operators.adoc[Supported Operators]
+

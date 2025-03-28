@@ -1,0 +1,8 @@
+ParameterName,Data Type,Default Value,Descriptions
+CalibNumBins,int,2048,"constant to specify the number of bins for the calibration methods that create histograms. For Entropy calibration, basically we will only use the default value 2048"
+CalibDatasetStride,int,None,"constant to devide dataset to save the memory usage. If None, this is ignored."
+CalibSaveHistogram,str,None,"path to save the histogram data. If None, this is ignored."
+CalibLoadHistogram,str,None,"path to load the histogram data. If None, this is ignored."
+SearchWindowThreshold,float,99.99999,"constant to determine the lower limit of search window width."
+FineGrainedSearchStep,int,4,"step for the second stage of search, the fine-grained search, of entropy calibration."
+LongTailDistributionCountermeasure,str,None,"whether to use special measurement for searching the optimal range of long-tail distribution. Now 'MinMax' is the only acceptable value. If None, this is ignored"

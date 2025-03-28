@@ -1,0 +1,20 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Gelu[onnx opset 20], https://pytorch.org/docs/stable/generated/torch.nn.GELU.html[torch.nn.GELU].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|approximate |ApproximateMode  |NONE, TANH |`"none"`: do not use approximation.`"tanh"`: use tanh approximation.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Gelu` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, they fallback to the reference implementation.

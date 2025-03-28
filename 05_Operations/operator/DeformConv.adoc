@@ -1,0 +1,31 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#DeformConv[onnx opset 19], https://pytorch.org/docs/stable/generated/torchvision.ops.deform_conv2d.html[torchvision.ops.deform_conv2d].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|dilation [2] |uint32 | |Dilation value along each spatial axis of the kernel.
+|groups |uint32 |All value except 0. |Number of groups the input and output channels, C and oC, are divided into. +
+C and oC must both be divisible by group.
+|deform_groups |uint32 |All value except 0. |Number of groups of offset. C must be divisible by offset_group.
+|padding [4] |uint32 | |Padding for the beginning and end along each spatial axis.
+|stride [2] |uint32 | |Stride along each spatial axis.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `DeformConv` operator.
+
+* DSP
+** Only 4D tensor is supported for `input`, `offset`, `weight`, `output`.
+** The weight tensor must be per-channel quantized.
+** Only symmetrical padding is supported.
+** The attributes must satisfy the following conditions.
+*** `0 < groups` && `input channels % groups == 0` && `output channels % groups == 0`
+*** `0 < deform_groups` && `input channels per group % deform_groups == 0`
+*** `0 < dilation height` && `0 < dilation width`
+*** `0 < stride height` && `0 < stride width`
+** If inputs or outputs are non-dense, then fallback to the reference implementation.

@@ -1,0 +1,14 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Not[onnx opset 1], https://pytorch.org/docs/stable/generated/torch.logical_not.html[torch.logical_not].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Not` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

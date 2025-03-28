@@ -1,0 +1,18 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Clip[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.Hardtanh.html[torch.nn.Hardtanh].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** Supported min value: 0 only.
+** Supported max value: 6 only.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** FP32 operator only verified with stand-alone test case.
+** In torch.nn.Hardtanh, int8 is not yet supported.

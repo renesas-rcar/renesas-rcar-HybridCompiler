@@ -1,0 +1,16 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Floor[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.floor.html[torch.floor].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Floor` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** FP32 operator only verified with stand-alone test case.
+** In `torch.floor`, FP32 is not yet supported.

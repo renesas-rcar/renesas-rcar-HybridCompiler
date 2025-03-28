@@ -1,0 +1,5 @@
+Preprocess,Calculation,ParameterName,DataType,DefaultValue,Trigger
+Normalization,"( x - mean ) / std",mean,float list,None,"If set to one of the values"
+↑,↑,std,float list,None,"If set to one of the values"
+ToTensor,x / 255,totensor,bool,None,"If set to true"
+Permutation,Reverses the order of the channel. It can be used for BGR -> RGB and RGB -> BGR conversion.,permute,bool,None,"If set to true"

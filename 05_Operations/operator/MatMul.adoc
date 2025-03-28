@@ -1,0 +1,23 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#MatMul[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.matmul.html[torch.matmul], {url_pt}torch.bmm.html[torch.bmm], {url_pt}torch.baddbmm.html[torch.baddbmm].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `MatMul` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** Not supported for the case where one is a 1D tensor and the other is a 3D or higher tensor for `TVM`.
+** Height must be same as width.
+** Both inputs are per axis quantization is not supported.
+** If the following condition(s) are not satisfied, then fallback to the reference implementation.
+*** Both inputs and outputs are dense.
+*** Both input ranks are equal or greater than 2.
+*** The number of elements in the innermost dimension of the second input is less than `33025`.
+** FP32 operator only verified with stand-alone test case.
+** In `torch.matmul`, FP32 is not yet supported.

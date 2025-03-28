@@ -1,0 +1,28 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Pad[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.functional.pad.html[torch.nn.functional.pad].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|mode |PadMode a| CONSTANT, +
+EDGE |Mode of padding.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Pad` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** If the following condition(s) are not satisfied, then fallback to the reference implementation.
+*** Mode is `CONSTANT`.
+*** Inputs or outputs are non-dense.
+** `Reflect mode` and `wrap mode` are not supported.
+** In `torch.nn.functional.pad`, parameter `mode` only supports `constant` and `replicate`.
+** In `torch.nn.functional.pad`, parameter `pad` only supports non-negative value.
+** `torch.nn.functional.pad` only supports constant_value = 0.
+** In `torch.nn.functional.pad`, input shape only supports dimensions from 2D-5D for `Edge` mode.

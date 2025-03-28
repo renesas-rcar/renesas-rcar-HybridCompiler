@@ -1,0 +1,17 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Squeeze[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.squeeze.html[torch.squeeze].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Squeeze` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Not supported for cases where the input and output scale and zero-point match and the squeeze output tensor is less than 1-dimensional for `TVM`.
+** FP32 operator only verified with stand-alone test case. This operator will be removed by `TVM` inference for latency improvement, because this is a memory operator.

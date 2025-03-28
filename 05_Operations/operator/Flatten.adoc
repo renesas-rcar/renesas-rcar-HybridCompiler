@@ -1,0 +1,20 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Flatten[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.flatten.html[torch.flatten].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 | |Indicate up to which input dimensions should be flattened to the outer dimension.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Flatten` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.

@@ -1,0 +1,29 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Transpose[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.transpose.html[torch.transpose], {url_pt}torch.permute.html[torch.permute].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|perm [7] |uint32 |[0, r-1] |r = rank(data)
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Transpose` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Does not support cases where perm is not explicitly specified for `TVM`.
+** Currently where only supports Elementwise inputs (does not supports broadcasting).
+** The default behavior of `perm` attribute (By default, reverse the dimensions) is not supported due to implementation convenience.
+** If `Attribute` is greater than or equal zero, then `Attribute [perm[i]]` less than input[i] dimension.
+** The input dimension must be equal to the output dimension.
+** The output shape must be equal to the input shape [perm[i].
+** Currently sparse output is not supported.
+** If input dimension is greater than one, the output tensor stride[index] equal to the output tensor shape [input dimension].
+** FP32 operator only verified with stand-alone test case.

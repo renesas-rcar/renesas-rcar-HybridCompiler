@@ -1,0 +1,14 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Acos[onnx opset 7], https://pytorch.org/docs/stable/generated/torch.acos.html[torch.acos].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Acos` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

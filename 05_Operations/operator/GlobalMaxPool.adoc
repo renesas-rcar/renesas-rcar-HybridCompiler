@@ -1,0 +1,16 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#GlobalMaxPool[onnx opset 1], https://pytorch.org/docs/stable/generated/torch.nn.AdaptiveMaxPool1d.html[torch.nn.AdaptiveMaxPool1d], {url_pt}torch.nn.AdaptiveMaxPool2d.html[torch.nn.AdaptiveMaxPool2d], {url_pt}torch.nn.AdaptiveMaxPool3d.html[torch.nn.AdaptiveMaxPool3d].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `GlobalMaxPool` operator.
+
+* DSP
+** Supported input tensor dimension: [3, 5]
+** Supported output tensor dimension: [3, 5]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Make sure that the sum of `pooling_size` must be smaller than `0x800000`.

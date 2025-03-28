@@ -1,0 +1,23 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ScatterND[onnx opset 18].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|reduction |ReductionMode a| NONE = 0, +
+ADD = 1, +
+MUL = 2 |mode.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ScatterND` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** The reference / optimized implementation does not support non-dense input and output tensors.
+** FP32 operator only verified with stand-alone test case.

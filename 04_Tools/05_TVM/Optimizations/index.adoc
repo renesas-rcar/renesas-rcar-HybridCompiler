@@ -1,0 +1,7 @@
+= TVM Optimizations
+
+This directory presents some of the optimizations done by TVM:
+
+* xref:codegen-optimizations.adoc[DKL Codegen Optimizations]
+* xref:misc-optimizations.adoc[Miscellaneous Optimizations]
+* xref:wakeup-sleep.adoc[Reducing runtime overhead through WUP/SLP]

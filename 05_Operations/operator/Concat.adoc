@@ -1,0 +1,26 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Concat[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.cat.html[torch.cat], {url_pt}torch.stack.html[torch.stack].
+
+==== Attribute
+
+[width="100%", cols="^.^10%h,^.^10%,^.^15%,.^55%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 |[0, r-1] |where r = rank(input).
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** Supported with following limitations.
+*** Limited to axes 1 and 2 for `TVM`.
+*** Function implemented for 4 inputs and 1 output case. CL can be generated. CL results are validated.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Verify that only `axis` dimension varies across input shapes.
+** FP32 operator only verified with stand-alone test case.
+** Regarding FP32 pytorch operator, `torch.cat` is supported but `torch.stack` is not yet supported.

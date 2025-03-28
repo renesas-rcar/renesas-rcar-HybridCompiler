@@ -1,0 +1,19 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Celu[onnx opset 12], https://pytorch.org/docs/stable/generated/torch.nn.CELU.html[torch.nn.CELU].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float |All value except 0.0 |Defines the Alpha value in Celu formula which control the shape of the unit.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Celu` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

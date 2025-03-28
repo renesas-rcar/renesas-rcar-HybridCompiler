@@ -1,0 +1,31 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#RoiAlign[onnx opset 16].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+| coordinate_transformation_mode | RoiAlignCoordinateTransformationMode | HALF_PIXEL, OUTPUT_HALF_PIXEL |
+| mode  | PoolingMode | AVG, MAX |
+| output_height  | uint32_t | |
+| output_width   | uint32_t | |
+| sampling_ratio | uint32_t | | It can set only 1 when Pooling mode is MAX
+| spatial_scale  | float    | |
+|===
+
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `RoiAlign` operator.
+
+* DSP
+** Supported input tensor dimension: 4.
+** Supported output tensor dimension: 4.
+** Supported `roi` dimension: 2, and the second dimension has to 4.
+** Supported `batch_indices` dimension: 1.
+** The first dimension of `roi` and `batch_indices` should be same.
+** The memory for the intermediate variables `PreCalcCoords` stays within RCARDKL_KERNEL_WORKING_MEMORY to avoid dynamic memory allocation.
+** Supported input shape is static shape only.
+** Only verified with stand-alone test case.

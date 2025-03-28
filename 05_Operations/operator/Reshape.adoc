@@ -1,0 +1,28 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Reshape[onnx opset 14], https://pytorch.org/docs/stable/generated/torch.reshape.html[torch.reshape], {url_pt}torch.Tensor.view.html[torch.Tensor.view], {url_pt}torch.Tensor.contiguous.html[torch.Tensor.contiguous].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|allowzero |uint8 | |Explicitly set the output shape to 0 if `shape` contains a 0 rather than copying from the input tensor
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** `Reshape` operation can be fused with preceding CNNIP operation when the parent only has a single child `Reshape` operation.
+** In that case, no particular CNNIP computation occurs for the `Reshape` operation.
+** CNNIP standalone `Reshape` layer is also supported.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** At most one dimension of the new shape can be -1. In this case, the value is inferred from the size of the tensor and the remaining dimensions. A dimension could also be 0, in which case the actual dimension value is unchanged (i.e. taken from the input tensor).
+** if `allowzero` is set and `in1` shape contains both 0 and -1, then failed.
+** Shape (second input) could be an empty shape, which means converting to a scalar.
+** `allowzero` has not been tested with 0 shape because of a quantizer issue. Need to add a test for it when the quantizer is updated.
+** FP32 operator only verified with stand-alone test case. This operator will be removed by `TVM` inference for latency improvement, because this is a memory operator.

@@ -1,0 +1,29 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#TopK[onnx opset 11], https://pytorch.org/docs/stable/generated/torch.topk.html[torch.topk].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis    |int8 |[0, r-1] |r = rank(data)
+|largest |int8 |0 or 1   |
+|sorted  |int8 |0 or 1   |
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `TopK` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If 'sorted' attribute is set to 0, an error will be thrown as it cannot be verified due to bit-exactness mismatch in the test process.
+** Input X scale factor must be positive to compare directly quantized values (more efficient).
+** The optimized implementation does not support non-dense input and output tensors.
+** If the number of values to sort is over a certain threshold, a reference fallback will occur to avoid stack overflow.
+** Only support initializer type INPUT K.
+** Only support Attribute largest == 1.
+** In ONNX, support only int8.
+** In `torch.topk`, support only FP32.

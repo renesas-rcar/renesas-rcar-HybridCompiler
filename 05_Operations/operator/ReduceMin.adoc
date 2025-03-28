@@ -1,0 +1,26 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ReduceMin[onnx opset 18], https://pytorch.org/docs/stable/generated/torch.min.html[torch.min].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|keepdims |uint8 |0, 1 a| 0 means reduce all axes. +
+1 means keep reduced dimension.
+|noop_with_empty_axes |uint8 |0, 1 a| Defines behavior if 'axes' is empty. +
+1 means input tensor will not be reduced, and the output tensor would be equivalent to input tensor.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ReduceMin` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The input / output shape must be not equal 0.
+** `ReduceMin` hasn't been validated for Identity set (When axes are empty and `noop_with_empty_axes` attribute is set to true, input tensor will not be reduced, and the output tensor would be equivalent to input tensor) Empty set (Input tensor when any of its shape is set to 0, for example [2,0,4]).
+** FP32 operator only verified with stand-alone test case.

@@ -1,0 +1,16 @@
+HyCo supports https://pytorch.org/docs/stable/generated/torch.roll.html[torch.roll].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Roll` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** In `torch.roll`, the parameter `shifts` and `dims` only supports 2 dimensions.
+** Supported input tensor dimension for ssp : 4

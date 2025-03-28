@@ -1,0 +1,15 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Neg[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.neg.html[torch.neg].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Neg` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** FP32 operator only verified with stand-alone test case.

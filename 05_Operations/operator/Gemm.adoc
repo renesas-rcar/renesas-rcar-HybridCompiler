@@ -1,0 +1,33 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Gemm[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.Linear.html[torch.nn.Linear].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float | |Scalar multiplier for the product of input tensors A * B.
+|beta |float | |Scalar multiplier for input tensor C.
+|transA |uint8 |0, 1 |Whether A should be transposed.
+|transB |uint8 |0, 1 |Whether B should be transposed.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Gemm` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** Input C is optional.  +
+If not specified, the computation is done as if C is a scalar 0. +
+If C is not passed, input size must be 8.
+** If the following condition(s) are not satisfied, then fallback to the reference implementation.
+*** `!trans_a && trans_b && alpha == 1.0f` && `beta == 1.0f`
+*** `rank(input_c) == 1`
+*** `input_b.shape[1] / 4` < `dtcm_available_size` && `input_b.shape[1] % 4 == 0`
+*** `dtcm_available_size` = `RCARDKL_KERNEL_WORKING_MEMORY` - `assigned_memory_size`
+**** `assigned_memory_size` = `input_b.shape[0] * 11 + input_b.shape[1] * 2`
+**** `RCARDKL_KERNEL_WORKING_MEMORY` is defined in +
+`include\rcar-xos\rcardkl\kernel\r_rcardkl_kernel_impl_common.h`.

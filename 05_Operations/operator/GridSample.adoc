@@ -1,0 +1,37 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#GridSample[onnx opset 20], https://pytorch.org/docs/stable/generated/torch.nn.functional.grid_sample.html[torch.nn.functional.grid_sample].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|align_corners |uint8 |0, 1 |How corner pixels are evaluated.
+|interpolation_mode |InterpolationMode a| BILINEAR = 0, +
+NEAREST = 1, +
+BICUBIC = 2 |Interpolation modes.
+|padding_mode |PaddingMode a| ZEROS = 0, +
+BORDER = 1, +
+REFLECTION = 2 |padding modes for outside grid values.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `GridSample` operator.
+
+* DSP
+** Supported input tensor dimension: `int8` is 4 and 5, `FP32` is 4 only.
+** Supported output tensor dimension: `int8` is 4 and 5, `FP32` is 4 only.
+** The batch size of `grid` equal to `input`.
+** The last shape element of `grid` must be 2.
+** The `input`, `grid`, `output` must be dense.
+** The `output_scale` must be not equal to 0.f.
+** If the following condition(s) are not satisfied, then fallback to the reference implementation:
+*** The `align_corners` must be equal to 0.
+*** The `interpolation_mode` must be equal to `BILINEAR`.
+*** The `padding_mode` must be equal to `ZERO`.
+*** The `input`, `grid`, `output` must be dense.
+*** The `grid_h_max` must be greater than or equal to 1.
+** FP32 operator only verified with stand-alone test case.
+** In `torch..nn.functional.grid_sample`, FP32 is not yet supported.

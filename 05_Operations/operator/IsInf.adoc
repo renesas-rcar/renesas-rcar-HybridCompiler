@@ -1,0 +1,23 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#IsInf[onnx opset 13].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|detect_negative |uint8 |0, 1 |(Optional) Whether map negative infinity to true. +
+Default to 1 so that negative infinity induces true. Set this attribute to 0 if negative infinity should be mapped to false.
+|detect_positive |uint8 |0, 1 |(Optional) Whether map positive infinity to true. +
+Default to 1 so that positive infinity induces true. Set this attribute to 0 if positive infinity should be mapped to false.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `IsInf` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.

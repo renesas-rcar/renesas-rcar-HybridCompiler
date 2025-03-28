@@ -1,0 +1,38 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#EinSum[onnx opset 12], https://pytorch.org/docs/stable/generated/torch.einsum.html[torch.einsum].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|equation |EinsumEquation a| QC_QHW_CHW, LBQC_BCHW_LBQHW |Einsum expression string.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `EinSum` operator.
+
+* DSP
+** Supported under the following limitations.
+*** Only 2 input tensors were supported.
+*** Only `QC_QHW_CHW` and `LBQC_BCHW_LBQHW` equation are supported.
+*** `QC_QHW_CHW`
+**** The input tensor dimension: 2.
+**** The output tensor dimension: 3.
+**** `q of input 0` = `q of input 1`
+**** `c of input 0` = `c of output`
+**** `h of input 1` = `h of output`
+**** `w of input 1` = `w of output`
+*** `LBQC_BCHW_LBQHW`
+**** The input tensor dimension: 4.
+**** The output tensor dimension: 5.
+**** `c of input 0` = `c of input 1`
+**** `b of input 0` = `b of input 1`
+**** `l of input 0` = `l of output`
+**** `b of input 0` = `b of output`
+**** `q of input 0` = `q of output`
+**** `h of input 1` = `h of output`
+**** `w of input 1` = `w of output`
+** If inputs or outputs are non-dense, then fallback to the reference implementation.

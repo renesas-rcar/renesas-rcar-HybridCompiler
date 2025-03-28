@@ -1,0 +1,14 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Asin[onnx opset 7], https://pytorch.org/docs/stable/generated/torch.asin.html[torch.asin].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Asin` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

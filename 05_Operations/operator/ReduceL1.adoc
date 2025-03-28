@@ -1,0 +1,25 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ReduceL1[onnx opset 18].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|keepdims |int8 |0, 1 a| 0 means reduce all axes. +
+1 means keep reduced dimension.
+|noop_with_empty_axes |int8 |0, 1 a| Defines behavior if 'axes' is empty. +
+1 means input tensor will not be reduced, and the output tensor would be equivalent to input tensor.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ReduceL1` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The input / output shape must be not equal 0.
+** `ReduceL1` hasn't been validated for Identity set (When axes are empty and `noop_with_empty_axes` attribute is set to true, input tensor will not be reduced, and the output tensor would be equivalent to input tensor) Empty set (Input tensor when any of its shape is set to 0, for example [2,0,4]).

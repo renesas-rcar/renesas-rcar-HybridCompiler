@@ -1,0 +1,22 @@
+[options="header"]
+|===
+| Acronym | Meaning | Complementary link
+| BYOM | Bring Your Own Model: defines the act of adding ones model to REACTION for evaluation |
+| CNNIP | R-Car V4x's AI accelerator, specialized in accelerating convolutions |
+| DSP | Digital Signal Processor, general purpose programmable processor |
+| DKL | DSP Kernel Library: kernel library developed for use with R-Car V4x's DSP |
+| DMAC/SDMAC | (Slim) Direct Memory Access Controller: performs data transfer between external memory and AI accelerator dedicated internal memory at high speed |
+| DTA | Debug Trace Agent: R-Car V4x's module for detailed profiling in the AI accelerator subsystem |
+| DTCM | Data Tightly Coupled Memory: designate the very fast SRAM memory that the DSP uses |
+| FP | Floating Point |
+| HyCo | Hybrid Compiler, used to compile models for R-Car V4x hardware | https://www.renesas.com/en/software-tool/hybrid-compiler-hyco[Reference]
+| ORT | ONNX Runtime |
+| OSAL | Operating System Abstraction Layer: abstracts the OS dependent function |
+| PTQ | Post Training Quantization: defines a type of quantization done after training is complete | https://ai.google.dev/edge/litert/models/post_training_quantization?hl=en[Reference]
+| QAT | Quantization Aware Training: defines a type of quantization that is done during model training | https://www.tensorflow.org/model_optimization/guide/quantization/training[Reference]
+| RDL | Renesas Device Library |
+| REACTION | Model evaluation environment developed by Renesas |
+| R-Car SDK | R-Car Software Development Kit: toolkit designed to efficiently support device evaluation and software development, including deep learning | https://www.renesas.com/en/software-tool/rox-software-development-kit#overview[Reference]
+| TVM | https://tvm.apache.org/docs/index.html[Deep learning compiler] developed by Apache, used as a base for HyCo |
+| V4H | High end variation of R-Car V4x | https://www.renesas.com/en/products/automotive-products/automotive-system-chips-socs/r-car-v4h-best-class-deep-learning-very-low-power-system-chip-automated-driving-level-2level-3[Reference]
+| V4M | Mid/Low end variation of R-Car V4x |

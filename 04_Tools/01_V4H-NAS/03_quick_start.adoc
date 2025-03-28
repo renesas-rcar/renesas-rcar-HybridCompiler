@@ -1,0 +1,121 @@
+== machine environment
+A Linux machine is required to run NAS.
+
+- NAS execution environment
+  * Ubuntu 20.04 LTS
+  * NVIDIA GeForce GTX 1080 Ti (12GB VRAM)
+  * NVIDIA driver 470.129.06
+  * Docker 20.10.7
+  * CUDA 11.4
+
+== Prepare datasets
+Datasets are required for training. In V4H-NAS, each task is trained on the following datasets:
+
+- Classification: https://www.image-net.org/[ImageNet]
+- Semantic Segmentation: https://aev-autonomous-driving-dataset.s3.eu-central-1.amazonaws.com/camera_lidar_semantic.tar[A2D2: Audi Autonomous Driving Dataset]
+- Object Detection: https://cocodataset.org/[COCO]
+
+If you train with other datasets, you need to convert them to the formats specified above to ensure compatibility.
+
+Note that the A2D2 dataset must be processed for training. The conversion can be performed by running the following script (data will be overwritten).
+
+```
+$ python3 mmsegmentation/tools/convert_datasets/a2d2.py /datasets/a2d2/camera_lidar_semantic --choice 18_cls --nproc 8
+```
+
+In Object Detection training, when using a sample configuration, create a subset as follows:
+
+```
+$ python3 tools/det/coco_div.py data/coco/annotations/instances_train2017.json data/instances_train2017_div10.json -d 10
+$ python3 tools/det/coco_div.py data/coco/annotations/instances_val2017.json data/instances_val2017_div5_num2.json -d 5 -n 2
+```
+
+== Set up Docker environment
+V4H-NAS is designed to run in a Docker container. Therefore, building the Docker image and running the container are required.
+It also requires GPU-enabled environment, so install https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html[NVIDIA Container Toolkit] before following procedures.
+
+First, build the Docker image:
+
+```shell-session
+$ cd ${WORK_DIR}/docker
+$ ./docker_build.sh
+```
+
+Next, start the docker container:
+
+```shell-session
+$ cd ${WORK_DIR}
+$ ./docker_run.sh
+```
+
+Run NAS in the docker container.
+
+It is required to mount or copy dataset directory into suitable directory -- for example `${WORK_DIR}/data`.
+`./setup.sh` is called when `docker_run.sh` is started, then mmclassification and mmsegmentation, mmdetection are installed.
+
+== Running NAS (table method)
+V4H-NAS needs two configuration files:
+
+- NAS configuration file
+  * Constraints for model generation (FLOPs, parameter size, latency) and training settings (epochs ...)
+- Search space file
+  * Settings about model to generate.
+  * It is referenced within the NAS configuration file
+
+Following procedure uses prepared two configurations:
+
+- NAS configuration file: `configs/cls/nas/nas/cls_nas_sample3.py`
+- Search space file: `configs/cls/nas/search_space/search_sample3.py`
+
+The front-end script of V4H-NAS is `nas/nas.py`. Following code can run NAS:
+
+```shell-session
+$ python3 nas/nas.py \
+      configs/cls/nas/nas/cls_nas_sample3.py \
+      --work-dir workdir \
+      --gpu-ids 0 1 \
+      --time_method table \
+      --table_filter nasdevicetools/v4h_table_estimator/configs/cfg_filter_cls_v4h2.yaml \
+      --table_path nasdevicetools/v4h_table_estimator/data/table_v4h2.nbt \
+```
+
+Description of command line parameters:
+
+- `--work-dir` is output directory
+- `--gpu-ids` is GPU indices
+- `--time_method` is latency estimation method. Specify `table`
+  * If it isn't specified, latency constraints will be ignored.
+- `--table_filter` is configuration file for table method estimator
+- `--table_path` is table for table method estimator
+
+Set these parameters according to the environment.
+The configuration file for table method estimator needs to be changed depending on the task.
+The above parameters can also be set in the NAS configuration file.
+
+When the execution is finished, the following files will be generated in the output directory (`workdir`).
+
+```
+workdir/
+|-- cfg_cls_nas_sample2.py  # NAS configuration file
+|-- models/  # generated models
+|   |-- model_list.csv  # model list
+|   |-- search_sample_gen0000.py  # generated model
+|   |-- search_sample_gen0000.onnx  # ONNX file converted from above model
+|   `--   :
+|-- result_stage1/  # result of Stage1
+|   |-- summary.csv  # model accuracies
+|   |-- search_sample_gen0000/  # training result of each models
+|   |   |-- yyyymmdd_000000.log
+|   |   |-- yyyymmdd_000000.log.json
+|   |   |-- best_accuracy_top-1_epoch_01.pth
+|   |   |-- best_score.csv  # Best score (updated at any time)
+|   |   |-- cfg_search_sample_gen0000.py  # Model training configuration
+|   |   |-- epoch_00.pth
+|   |   |-- epoch_01.pth
+|   |   |-- final_score.csv  # Best score (Created when training is finished)
+|   |   `-- latest.pth  # Checkpoint when training is finished
+|   |-- search_sample_gen0001/
+|   `--   :
+|-- result_stage2/  # result of Stage2
+|-- result_stage3/  # result of Stage3
+```

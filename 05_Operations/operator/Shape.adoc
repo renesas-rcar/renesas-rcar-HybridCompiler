@@ -1,0 +1,24 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Shape[onnx opset 15], https://pytorch.org/docs/stable/generated/torch.Tensor.shape.html[torch.Tensor.shape], {url_pt}torch.Tensor.size.html[torch.Tensor.size].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|start |uint8 |[0, r] |where r = rank(input).
+|end |uint8 |[0, r] |where r = rank(input). Values > r will be clipped to r.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Shape` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** `TVM` converts to constant, so `DKL` kernel calls are not implemented.
+** If the output dimension is not equal to 0, the output dimension is greater than or equal to the output shape.
+** If the input dimension is not equal to 0, the output shape is equal to the expected (end - start) shape.
+** The optimized implementation not supported. Fallback to the reference implementation.

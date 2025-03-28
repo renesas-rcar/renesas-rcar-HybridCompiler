@@ -1,0 +1,32 @@
+link:../index.adoc[=> Click to go back to index.adoc]
+
+== Extra options
+
+The available extra_options are sourced from two parts: the original options in onnxruntime v1.17.1 and newly-added options for rcar_ort_quantizer. For details about the original options in onnxruntime, see details link:https://github.com/microsoft/onnxruntime/blob/v1.17.1/onnxruntime/python/tools/quantization/quantize.py#L343[here]. We will only list the newly-added options for rcar_ort_quantizer in this documentation.
+
+[options="header"]
+|===
+| Available extra option                | Type              | Default value    | Category               | Description                                                                                                                                                             
+| CalibPercentile                       | float             | 99.999           | Percentile calibration | A float number between [0, 100].                                                                                                                                        
+| CalibNumBins                          | int               | 2048             | Percentile/Entropy calibration | Number of bins to create a new histogram for collecting tensor values.                                                                                                  
+| CalibDatasetStride                    | int               | None (Optional)  | Percentile calibration | Number of strides used when loading calibration dataset.
+| CalibSaveHist                         | str               | None (Optional)  | Percentile calibration | Save pkl file path of calibrated histogram for percentile method.                                                                                                       
+| CalibLoadHist                         | str               | None (Optional)  | Percentile calibration | Load pkl file path of calibrated histogram for percentile method.                                                                                                       
+| num_quantized_bins                    | int               | 256              | Entropy calibration    | Number of quantized bins                                                                                                                                                
+| SearchWindowThreshold                 | float             | 99.99999         | Entropy calibration    | Constant to determine the lower limit of search window width.                                                                                                           
+| FineGrainedSearchStep                 | int               | 4                | Entropy calibration    | Step for the 2nd stage of search, the fine-grained search, of entropy calibration.                                                                                      
+| LongTailDistributionCountermeasure    | str               | None (Optional)  | Entropy calibration    | Whether to use special measurement for searching the optimal range of long-tail distribution. Now 'MinMax' is the only acceptable value. If None, this is ignored      
+| compiler_type                         | CompilerType      | CompilerType.TVM | CompilerType           | Set the compiler type. Switch compiler-dependent processing.                                                                                                            
+| device_type                           | DeviceType        | DeviceType.V4H2  | DeviceType             | Set the device type. Switch device-dependent processing, such as changing parameter constraints for each device.                                                        
+| custom_operator_lib                   | str               | None (Optional)  | Custom node            | Set a path to a shared library for custom operators.                                                                                                                    
+| raw_image_input_layer_names           | dict              | None (Optional)  | Input type             | Define the input layer to use a raw input image as input.                                                                                                               
+| Int16Activations                      | list[tensor_name] | None (Optional)  | Int16 quantization     | Define the nodes whose activation can be quantized with int16.                                                                                                          
+| InsertPreprocess                      | dict or list      | None (Optional)  | Pre-process            | Allow CNNIP to perform pre-processing. Specifically, a conv layer for preprocessing is inserted at the beginning of the ONNX model.                                     
+| MergeNormToConv2d                     | dict or list      | None (Optional)  | Legalization           | Flag for merging Normalization (( x - mean ) / std) preprocessing into the first Convolution.                                                                                                                             
+| EnableGeluFusion                      | bool              | None (Optional)  | Legalization           | Fuse a sequence of multiple operators into a single com.microsoft.Gelu operator.                                                                               
+| ReduceMean2Gap                        | bool              | None (Optional)  | Legalization           | Convert ReduceMean to GlobalAveragePool and execute using CNNIP for better performance.                                                                                    
+| BiasOverflowPreventionNodes           | list[node_name]   | None (Optional)  | BiasOverflow           | If the node's name is in this list, bias overflow prevention is enabled for that node.                                                                                  
+| BiasOverflowPreventionAll             | bool              | None (Optional)  | BiasOverflow           | If true, the bias overflow prevention technique is enabled for all nodes.                                                                                                   
+|===
+
+link:../index.adoc[=> Click to go back to index.adoc]

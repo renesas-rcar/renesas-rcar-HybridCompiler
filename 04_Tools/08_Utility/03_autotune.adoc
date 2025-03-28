@@ -1,0 +1,270 @@
+=== Autotune by Hyperband
+
+This part will introduce a utility to auto-tune hyperparameters by Hyperband when performing PyTorch QAT, and how to make use of it in REACTION.
+
+==== Introduction to Hyperband
+
+Hyperband is based on Successive-Halving Algorithm. The idea behind Successive-Halving Algorithm follows directly from its name: uniformly allocate a budget to a set of hyperparameter configurations, evaluate the performance of all configurations, throw out the worst half, and repeat until one hyperparameter configuration remains.
+
+The following table shows an example of Successive-Halving strategy:
+
+[cols="^1,^1"]
+|===
+| n (number of hyperparameter configs)      | r (resource)
+| 35                                        | 1
+| 18                                        | 2
+| 9                                         | 4
+| 5                                         | 8
+| 3                                         | 16
+|===
+
+where n is the number of hyperparameter configurations and r denotes allocated resources(epochs).
+
+Hyperband extends the idea of Successive-Halving. One drawback of Successive-Halving is that for some potential hyperparameter configurations, they might not look good in the beginning (e.g. only trained with 1 epoch) and might be eliminated after first selection round. To provide opportunities for those potential candidates, Hyperband extends Successive-Halving with more brackets. It adds brackets in which fewer hyperparameter configurations are sampled, but more epochs are used to train with those configurations before the selection process.
+
+There are two inputs for Hyperband:
+
+- **R**: the maximum amount of resource(epochs) that can be allocated to a single configuration
+- **nu**: an input that controls the proportion of configuration survived in each round of selection
+
+The most common setting for R is 81 or 27, and for nu is 3 or 4.
+
+When R=27 and nu=3, the strategy will be:
+
+[cols="^1,^1,^1,^1,^1,^1,^1,^1,^1"]
+|===
+|     2+| s=3           2+| s=2         2+| s=1         2+|s=0
+|       | n       | r     | n     | r     | n     | r     | n     | r              
+| i=0   | 27      | 1     | 9     | 3     | 6     | 9     | 4     | 27
+| i=1   | 9       | 3     | 3     | 9     | 2     | 27    |       |   
+| i=2   | 3       | 9     | 1     | 27    |       |       |       |   
+| i=3   | 1       | 27    |       |       |       |       |       |   
+|===
+
+In bracket s=3, 27 hyperparameter configurations are sampled and used to train the model for one epoch. According to the evaluation results, 9 candidates are selected and adopted to continue the training to three epochs. The procedure repeats until the last one hyperparameter configuration in this bracket survives and used to train the model to totally 27 epochs. Hyperband extends the idea of Successive-Halving by adding more brackets, i.e. s=2, s=1 and s=0 in this example.
+
+Another common setting is R=81 and nu=3, and the strategy follows:
+
+[cols="^1,^1,^1,^1,^1,^1,^1,^1,^1,^1,^1"]
+|===
+|     2+| s=4           2+| s=3         2+| s=2         2+|s=1          2+|s=0
+|       | n       | r     | n     | r     | n     | r     | n     | r     | n     | r     
+| i=0   | 81      | 1     | 27    | 3     | 9     | 9     | 6     | 27    | 5     | 81
+| i=1   | 27      | 3     | 9     | 9     | 3     | 27    | 2     | 81    |       |
+| i=2   | 9       | 9     | 3     | 27    | 1     | 81    |       |       |       |
+| i=3   | 3       | 27    | 1     | 81    |       |       |       |       |       |
+| i=4   | 1       | 81    |       |       |       |       |       |       |       |
+|===
+
+==== How to define searching space
+
+The searching space is defined by the dictionary named **`searching_space_dict`** in target model's config file. Searching space can be customized for the target model by following the guidelines.
+
+[id="check-where-to-access-target-hyperparameters"]
+===== Check where to access target hyperparameters
+
+At first, please confirm how to set the target hyperparameters to train the model by **checking model's config file** (e.g. ResNet18.py). For example, optimizer and scheduler for ResNet18 are:
+
+[source,python]
+```
+optim_wrapper = dict(optimizer=dict(type="SGD", lr=0.0001, momentum=0.9, weight_decay=0.0001))
+```
+
+[source,python]
+```
+param_scheduler = dict(type="MultiStepLR", by_epoch=True, milestones=[3, 8, 20], gamma=0.1)
+```
+
+which means optimizer is specified by the dictionary `optimizer` in `optim_wrapper` and scheduler is specified by the dictionary `param_scheduler`.
+
+You can also check the **model_cfg variable** that is used to build the runner for QAT in reaction/convert/quant/quantize_torch.py. You can print that variable out and confirm where to set your target hyperparameters.
+
+For example, by checking the model_cfg variable for ResNet18, the optimizer is set by:
+
+[source,python]
+```
+'optim_wrapper': {'optimizer': {'type': 'SGD', 'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+```
+
+And the following part in model_cfg variable shows how the scheduler is specified:
+
+[source,python]
+```
+'param_scheduler': {'type': 'MultiStepLR', 'by_epoch': True, 'milestones': [3, 8, 20], 'gamma': 0.1}
+```
+
+[id="formats-to-set-searching-range"]
+===== Formats to set search range
+
+There're three formats that can be used to define the search range for each hyperparameter.
+
+====== `simple` format
+
+The following is an example to set the search range for momentum:
+
+[source,python]
+```
+"name": "momentum",
+"format": "simple",
+"range": [80, 99],
+"multiplier": 0.01,
+```
+
+In this example, `"format"` is set to be `"simple"`. By the setting of `"range"` and `"multiplier"`, the search range for this hyperparameter will be [0.80, 0.99] with boundary included. `"multiplier"` controls the granularity of candidates to be sampled. Please note that `"range"` could only be set as integers and `"multiplier"` is optional and will be one if not specified.
+
+====== `choice` format
+
+The following shows an example of defining search range for what kinds of schedulers to be searched during the autotuning process:
+
+[source,python]
+```
+"name": "type",
+"format": "choice",
+"range": ["MultiStepLR", "CosineAnnealingLR"],
+```
+
+The `"format"` is set as `"choice"`. `"MultiStepLR"` and `"CosineAnnealingLR"` will be sampled to build the scheduler.
+
+====== `coef_exp` format
+
+The following is an example showing how to define the search range for learning rate:
+
+[source,python]
+```
+"name": "lr",
+"format": "coef_exp",
+"range": {"coef": [1, 9], "exp": [-7, -3]},
+```
+
+The `"format"` is set as `"coef_exp"`. By this format, the search range for the hyperparameter is defined separately by coefficient part and exponent part. Based on this example, `"lr"` can be represented as a x 10^b^. Candidates for a is sampled from [1, 9], and for b is sampled from [-7, -3], with boundary included. Noted that the values to specify the range for `"coef"` and `"exp"` should be integers.
+
+===== How to define searching space for optimizer
+
+To define the searching space for optimizer, the key `"optimizer"` can be used in the dictionary `searching_space_dict` in target model's config file. From <<check-where-to-access-target-hyperparameters, Check where to access target hyperparameters>> part we know that optimizer to train the model is specified by the key `optimizer` in `optim_wrapper` for ResNet18. This information should be provided to `"config_indicator"` in the format of sequence of keys specifying how to access the optimizer setting in model_cfg, i.e. `["optim_wrapper", "optimizer"]` in this case.
+
+According to <<check-where-to-access-target-hyperparameters, Check where to access target hyperparameters>> part, the key `"type"` is used to specify what kind of optimizer is used to train the model. In this case we define `"name"` of target hyperparameter (optimizer type) to be searched as `"type"` and `"range"` of it as `["SGD", "AdamW"]`. `"format"` as `"choice"` means one of the optimizer type in the list will be sampled for each hyperparameter configuration. Following is an example of how to define searching space for optimizer.
+
+[source,python]
+```
+"optimizer": {
+    "config_indicator": ["optim_wrapper", "optimizer"],
+    "name": "type",
+    "format": "choice",
+    "range": ["SGD", "AdamW"],
+    "params": {
+        "SGD": [
+            {
+                "name": "lr",
+                "format": "coef_exp",
+                "range": {"coef": [1, 9], "exp": [-7, -3]},
+            },
+            {
+                "name": "weight_decay",
+                "format": "coef_exp",
+                "range": {"coef": [1, 9], "exp": [-7, -3]},
+            },
+            {
+                "name": "momentum",
+                "format": "simple",
+                "range": [80, 99],
+                "multiplier": 0.01,
+            },
+            {
+                "name": "nesterov",
+                "format": "choice",
+                "range": [False, True],
+            },
+        ],
+        "AdamW": [
+            {
+                "name": "lr",
+                "format": "coef_exp",
+                "range": {"coef": [1, 9], "exp": [-7, -4]},
+            },
+            {
+                "name": "weight_decay",
+                "format": "coef_exp",
+                "range": {"coef": [1, 9], "exp": [-7, -3]},
+            },
+            {
+                "name": "eps",
+                "format": "coef_exp",
+                "range": {"coef": [1, 9], "exp": [-14, -2]},
+            },
+        ],
+    },
+}
+```
+
+Searching space of hyperparameters for each type of optimizer is defined in the dictionary corresponding to key `"params"`. The key `"SGD"` in `"params"` is used to define the search range of each hyperparameter of SGD optimizer. Data corresponding to `"SGD"` in `"params"` is a list of dictionaries. Key `"name"` in each of these dictionaries is the name of the hyperparameter of SGD optimizer to be searched. The search range can be specified by each of the 3 different formats mentioned in <<formats-to-set-searching-range, Formats to set search range>>. Hyperparameters of the other type of optimizer in this example, AdamW, are set by the key `AdamW` in `params` in the same way.
+
+In this example `"config_indicator"` is specified as `["optim_wrapper", "optimizer"]`, so all the data corresponding to `"name"`, in above example, like `"type"`, `"lr"` and `"weight_decay"`, are used as keys to compose the dictionary `"optimizer"` in dictionary `"optim_wrapper"` as follows:
+
+[source,python]
+```
+optim_wrapper = dict(optimizer=dict(type=xxx, lr=xxx, weight_decay=xxx, ...))
+```
+
+where xxx's are sampled from specified search ranges for each hyperparameter configuration, and each of these dictionary definitions will be used to update model_cfg to build the runner for automatic QAT.
+
+===== How to define searching space for scheduler
+
+Similar to optimizer, to define the searching space for scheduler, the dictionary `"scheduler"` can be defined in `"searching_space_dict"`. <<check-where-to-access-target-hyperparameters, Check where to access target hyperparameters>> part shows an example that the scheduler is set by the key `"param_scheduler"` in model_cfg for ResNet18. The information is used to set `"config_indicator"` of this scheduler dictionary as `["param_scheduler"]`.
+
+[source,python]
+```
+"scheduler": {
+    "config_indicator": ["param_scheduler"],
+    "name": "type",
+    "format": "choice",
+    "range": ["MultiStepLR", "CosineAnnealingLR"],
+    "params": {
+        "MultiStepLR": [
+            {
+                "name": "milestones",
+                "format": "choice",
+                "range": [[3, 8, 20], [5, 10, 20]],
+            },
+            {
+                "name": "gamma",
+                "format": "choice",
+                "range": [0.1],
+            },
+        ],
+        "CosineAnnealingLR": [
+            {
+                "name": "T_max",
+                "format": "choice",
+                "range": [27],
+            },
+        ],
+    },
+}
+```
+
+In this case the range for `type` is set as `["MultiStepLR", "CosineAnnealingLR"]` with `"choice"` format, which means scheduler type will be sampled from the two for each hyperparameter configuration. Further hyperparameters of each scheduler type are set by the key `"params"`.
+
+==== Enable Hyperband for QAT
+
+After defining the searching space in target model's config, Hyperband can be enabled for QAT by adding flag `hyperband` in `train_configs` in reaction.yaml, with `enable` set to True. Following is an example:
+
+[source,yaml]
+```
+train_configs:
+    do_ptq: False
+    epochs: 20
+    train_batch_size: 8
+    early_exit_batches_per_epoch: 1000
+    early_stopping_patience: 8
+    hyperband:
+        enable: True
+        R: 27
+        nu: 3
+        resume: False
+```
+
+Other flags `R` and `nu` are inputs of Hyperband algorithm, where `R` is the maximum epochs that can be allocated for one candidate of hyperparameter configurations to train the model, and `nu` is used to decide the ratio of survival for each selection process of Hyperband.
+
+The flag `resume` is used to resume the autotuning process of Hyperband. There are .ini files in generated work_dir/logs_pytorch/hyperband recording the hyperparameters and score of each candidate. They are used to resume Hyperband process if it is stopped/interrupted for some reason.
+
+Please note that the flag `epochs` in `train_configs` is disabled when performing Hyperband. The number of epochs for each hyperparameter configuration is decided by Hyperband strategy.

@@ -1,0 +1,16 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#LessOrEqual[onnx opset 16], https://pytorch.org/docs/stable/generated/torch.le.html[torch.le].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `LessOrEqual` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Support only int8.

@@ -1,0 +1,21 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#InstanceNormalization[onnx opset 6], https://pytorch.org/docs/stable/generated/torch.nn.InstanceNorm2d.html[torch.nn.InstanceNorm2d].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|epsilon |float |greater than 0. |The epsilon value to use to avoid division by zero.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `InstanceNormalization` operator.
+
+* DSP
+** Supported input tensor dimension: [3, 7]
+** Supported output tensor dimension: [3, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Simplify Inference converts to `Mul+Add` for `TVM`.

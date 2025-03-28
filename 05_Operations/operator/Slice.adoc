@@ -1,0 +1,16 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Slice[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.narrow.html[torch.narrow], {url_pt}torch.select.html[torch.select], {url_pt}torch.index_select.html[torch.index_select].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP can support `Slice` H and W direction.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case.

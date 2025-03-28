@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#LpNormalization[onnx opset 1].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 |[0, r-1] |where r = rank(input).
+|p    |int8  | 1, 2 |
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `LpNormalization` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Simplify Inference converts to `Mul+Add` for `TVM`.

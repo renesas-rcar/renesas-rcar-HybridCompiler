@@ -1,0 +1,16 @@
+link:../index.adoc[=> Click to go back to index.adoc]
+
+== Customization in RCar ORT quantizer
+
+The following customization process will be done with hw_customizer.
+
+* Change the data range for raw image inputs
+** Change the data range of the uint8 image input layers to [0, 255]
+** Change the data range of the int16 image input layers to [-32768, 32767]
+* Make sure the parent range of the group covers all child ranges
+** Target op: "MaxPool", "AveragePool", "Concat", "Reshape"
+* Copy the range of Relu/Brelu output to the range of input
+** Target op: "Conv", "ConvTranspose", "Add", "MMCVDeformConv2d"
+* Adjust child range to the parent range
+
+link:../index.adoc[=> Click to go back to index.adoc]

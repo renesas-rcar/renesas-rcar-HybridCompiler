@@ -1,0 +1,15 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Sigmoid[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.Sigmoid.html[torch.nn.Sigmoid].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** FP32 operator only verified with stand-alone test case.

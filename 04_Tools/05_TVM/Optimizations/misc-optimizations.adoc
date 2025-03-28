@@ -1,0 +1,11 @@
+= Miscellaneous Optimizations
+
+Some of the other notable optimizations are described here.
+
+== Operator fusion for MatMul+Add
+
+The frontend replaces a MatMul+Add combination with a call to an optimized implementation of MatMulAdd DKL fused operator when the result of the intermediate MatMul operator isn't used by anything else.
+
+== Skip unnecessary slice 
+
+The frontend removes slice operators that have a stride of 1 and whose begin and end parameters cover the entire axis.

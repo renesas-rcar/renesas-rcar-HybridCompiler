@@ -1,0 +1,15 @@
+HyCo supports https://pytorch.org/docs/stable/generated/torch.clamp.html[torch.clamp].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Clamp` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** In `torch.clamp`, the parameter `max` and `min` follow with the input's dtype(not flexible).

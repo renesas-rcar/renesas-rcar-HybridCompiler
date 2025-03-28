@@ -1,0 +1,42 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#MaxPool[onnx opset 12], https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html[torch.nn.MaxPool2d].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|auto_pad |AutoPad |NOTSET |Specify padding mode.
+|ceil_mode |uint8 |0, 1 |Whether to use ceil or floor to compute the output shape.
+|Dilations [5] |uint8 | |Dilation value along each spatial axis of filter.
+|kernel_shape [5] |uint8 | |The size of the kernel along each axis.
+|Pads [10] |uint8 | |Padding for the beginning and ending along each spatial axis.
+|storage_order |uint8 |0, 1 |The storage order of the tensor. 0 is row major, and 1 is column major.
+|Strides [5] |uint8 | |Stride along each spatial axis.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Limited to `pool_size < 5` and `padding < 3` for `TVM`.
+** Supported `input tensor dimension` is 4.
+** Supported `kernel size` is 1 to 4.
+** Supported `stride` is 1 to 4.
+** Supported `padding` is 0 to 1.
+** Supported with following limitations.
+*** `Max pooling (Normal)`
+**** `kernel size`: 1 to 2 (kernel = stride only)
+**** `padding`: 0
+*** `Max pooling (Overlapped)` is supported for parameter below.
+**** `kernel size`: 1x3, 3x1, 3x3, stride: 1x1.
+**** `kernel size`: 3x3, stride 2x2.
+*** Supported 8bit input -> 8bit output
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** `TVM` restriction
+*** Supports only 1 output (not supported for indices output)
+*** Only kernel dimensions 1, 2, and 3 are supported.
+*** Supports only `storage_order` is 0.
+** FP32 operator only verified with stand-alone test case.

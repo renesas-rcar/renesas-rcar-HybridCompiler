@@ -1,0 +1,14 @@
+HyCo supports https://pytorch.org/docs/stable/generated/torch.nn.L1Loss.html[torch.nn.L1Loss].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `L1Loss` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

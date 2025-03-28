@@ -1,0 +1,24 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ArgMin[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.argmin.html[torch.argmin].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+| axis | uint8 | [0, r-1] | where r = rank(data)
+| keepdims | uint8 | 0, 1 | Keep the reduced dimension or not, 1 means keep reduced dimension.
+| select_last_index | uint8 | 0, 1 | Whether to select the last index or the first index.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ArgMin` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Limited to 32 channels.
+** Output shape must be (s[0], ..., s[`axis`-1], 1, s[`axis` + 1], ..., s[dim-1]), where s = input tensor shape.

@@ -1,0 +1,27 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ConvTranspose[onnx opset 11], https://pytorch.org/docs/stable/generated/torch.nn.ConvTranspose2d.html[torch.nn.ConvTranspose2d].
+
+==== Attribute
+
+[width="100%", cols="^.^25%h,^.^15%,^.^15%,.^45%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|auto_pad |STRING | |
+|Dilations |INTS |1 |Limitation of CNNIP.
+|group |INT |1 |Limitation of CNNIP.
+|kernel_shape |INTS |2x2, 3x3, 4x4, 5x5 |Limitation of CNNIP.
+|Output_padding |INTS | |
+|Output_shape |INTS | |
+|Pads |INTS |0 to 16 (x-direction), +
+0 to 7 (y-direction) |Limitation of CNNIP.
+|Strides |INTS |1, 2 |Limitation of CNNIP.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** CNNIP supports the `ConvTranspose` operator as the `deconvolution` layer.
+
+* DSP
+** DSP does not support the `ConvTranspose` operator.

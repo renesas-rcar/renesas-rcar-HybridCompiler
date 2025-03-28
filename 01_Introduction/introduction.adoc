@@ -1,0 +1,47 @@
+= Introduction
+
+== Purpose
+Welcome to Renesas Hybrid Compiler (HyCo) guide.
+HyCo offers a comprehensive toolchain designed to efficiently deploy and optimize AI models for the diverse accelerators within R-Car SoCs' heterogeneous environments.
+
+== Conventions
+- Function declarations, function names, type declarations, filenames, directory names, and library names are shown in a different font. For example: `#include`.
+- Commands and code samples appear in a specially formatted code section. For example:
+
+[source,python]
+----
+output = (input - offset) * scale
+----
+
+- Mathematical expressions appear in a specially formatted math section. For example:
+
+$$
+a² + b² = c²
+$$
+
+- Environment variables appear preceded by `$`, for example `$TVM_RCAR_ESTIMATOR`.
+
+== System Requirements
+
+
+.The environment used to validate this software
+[options="header"]
+|===
+| Item               | Name        | Note
+
+| Supported Host OS  | Linux       | Linux Ubuntu 20.04 LTS (64bit)
+
+.4+| ToolChain        | CMake       | version = 3.21.0
+                      | Docker      | version >= 21.0.6
+                      | Docker Compose | version >= 2.27.1
+                      | GCC/G++     | version = 9.4.0
+| Python              | Interpreter      | version >= 3.10
+| Frameworks          | ONNX        | version = 1.15.0
+| R-Car SDK           | R-Car SDK   | xOS3
+
+.5+| Python packages  | Requests    | version \<= 2.32.1
+                      | NumPy       | version >= 1.22.4
+                      | ONNX Runtime | version = 1.17.1 (CPU or GPU)
+                      | Pandas      | version >= 1.3.5
+                      | Pyyaml      | version >= 6.0
+|===

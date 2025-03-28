@@ -1,0 +1,25 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#BatchNormalization[onnx opset 15], https://pytorch.org/docs/stable/generated/torch.nn.functional.batch_norm.html[torch.nn.functional.batch_norm].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|epsilon |float |Greater than 0. |The epsilon value to use to avoid division by zero.
+|momentum |float |[0, 1] |Factor used in computing the running mean and variance.e.g., running_mean = running_mean * momentum + mean * (1 - momentum).
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `BatchNormalization` operator.
+
+* DSP
+** Supported input tensor dimension: [2, 7]
+** Supported output tensor dimension: [2, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The input tensor shape and the output tensor shape must be the same.
+** Simplify Inference converts to `Mul+Add` for `TVM`.
+** FP32 operator only verified with stand-alone test case.
+** In torch.nn.functional.batch_norm, int8 is not yet supported.

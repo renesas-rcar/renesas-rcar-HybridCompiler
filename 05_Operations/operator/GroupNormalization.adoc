@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#GroupNormalization[onnx opset 18].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|epsilon |float |greater than 0. |The epsilon value to use to avoid division by zero.
+|num_groups |int32 |greater than 0. |The number of groups of channels. It should be a divisor of the number of channels C.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `GroupNormalization` operator.
+
+* DSP
+** Supported input tensor dimension: [3, 7]
+** Supported output tensor dimension: [3, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Simplify Inference converts to `Mul+Add` for `TVM`.

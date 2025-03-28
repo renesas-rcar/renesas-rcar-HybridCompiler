@@ -1,0 +1,19 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ThresholdedRelu[onnx opset 10].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float | |Threshold value
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ThresholdedRelu` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

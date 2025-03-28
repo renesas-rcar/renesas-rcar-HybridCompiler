@@ -1,0 +1,17 @@
+== Renesas Official Websites on AI Solutions
+
+https://www.renesas.com/en/products/automotive-products/automotive-system-chips-socs#videos_training[R-Car Automotive System-on-Chips (SoCs)]
+
+https://www.renesas.com/en/products/automotive-products/automotive-system-chips-socs/r-car-v4h-best-class-deep-learning-very-low-power-system-chip-automated-driving-level-2level-3[R-Car-V4H]
+
+https://www.renesas.com/en/software-tool/rox-software-development-kit[RoX Software Development Kit]
+
+https://www.renesas.com/en/software-tool/tools-optimize-ai-software-adadas-r-car-soc#software_list[Tools to Optimize AI Software for AD/ADAS on R-Car SoC]
+
+https://www.renesas.com/en/software-tool/hybrid-compiler-hyco[Hybrid Compiler (HyCo)]
+
+https://www.renesas.com/en/software-tool/r-car-dnn-compiler[R-Car DNN Compiler]
+
+https://www.renesas.com/en/software-tool/r-car-dnn-simulator[R-Car DNN Simulator]
+
+https://www.renesas.com/en/software-tool/r-car-nas-neural-architecture-search[R-Car NAS (Neural Architecture Search)]

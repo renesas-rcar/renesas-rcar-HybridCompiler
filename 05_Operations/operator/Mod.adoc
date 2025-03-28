@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Mod[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.remainder.html[torch.remainder], {url_pt}torch.fmod.html[torch.fmod].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|fmod |int8 |1 |Support forced fmod treatment only
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Mod` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** In `torch.fmod`, If `input` is `int8`, the parameter `other` supports only a `tensor`.
+** `torch.remainder` is not yet supported.

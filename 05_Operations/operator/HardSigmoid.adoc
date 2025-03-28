@@ -1,0 +1,20 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#HardSigmoid[onnx opset 6], https://pytorch.org/docs/stable/generated/torch.nn.Hardsigmoid.html[torch.nn.Hardsigmoid].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float | |Value of alpha.
+|beta |float | |Value of beta.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `HardSigmoid` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

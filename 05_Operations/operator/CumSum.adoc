@@ -1,0 +1,24 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#CumSum[onnx opset 14], https://pytorch.org/docs/stable/generated/torch.cumsum.html[torch.cumsum].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|exclusive |uint8 |0, 1 |If set to 1, the j-th output element would be the sum of the first (j-1) elements. Otherwise, it would be the sum of the first j elements.
+|reverse |uint8 |0, 1 |If set to 1 will perform the sums in reverse direction.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `CumSum` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The input and output tensor shape must not be equal to 0.
+** Accepted range of `axis` is [0, r-1] where r = rank(data).
+** In `torch.cumsum` has an argument `dtype`, which must be set to `None` (None is default).

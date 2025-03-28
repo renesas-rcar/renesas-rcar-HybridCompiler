@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#LeakyRelu[onnx opset 16], https://pytorch.org/docs/stable/generated/torch.nn.LeakyReLU.html[torch.nn.LeakyReLU].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^10%,^.^20%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float |0.f <= alpha < 1.0f |CNNIP treats this attribute as negative slope.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case.
+** In `torch.nn.LeakyReLU`, FP32 is not yet supported.

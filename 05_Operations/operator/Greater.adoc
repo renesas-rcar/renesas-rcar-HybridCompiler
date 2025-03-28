@@ -1,0 +1,17 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Greater[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.gt.html[torch.gt].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Greater` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7]
+** Supported output tensor dimension: [0, 7]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case.
+** In `torch.gt`, If `input` is `int8`, the parameter `other` supports only a `tensor`.

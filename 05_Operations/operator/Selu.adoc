@@ -1,0 +1,20 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Selu[onnx opset 6], https://pytorch.org/docs/stable/generated/torch.nn.SELU.html[torch.nn.SELU].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float | |Value of alpha.
+|gamma |float | |Value of gamma.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Selu` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].

@@ -1,0 +1,23 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#LRN[onnx opset 13].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|alpha |float | |Scaling parameter.
+|beta |float | |The exponent.
+|bias |float | |-
+|size |uint32 | |The number of channels to sum over.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `LRN` operator.
+
+* DSP
+** Supported input tensor dimension: 4.
+** Supported output tensor dimension: 4.
+** If inputs or outputs are non-dense, then fallback to the reference implementation.

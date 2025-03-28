@@ -1,0 +1,24 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#GlobalAveragePool[onnx opset 1], https://pytorch.org/docs/stable/generated/torch.nn.functional.adaptive_avg_pool1d.html[adaptive_avg_pool1d], {url_pt}torch.nn.functional.adaptive_avg_pool2d.html[adaptive_avg_pool2d], {url_pt}torch.nn.functional.adaptive_avg_pool3d.html[adaptive_avg_pool3d].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** Supported input tensor dimension: 4.
+** Limited to feature maps that fit in SMPC with shape <= (4096, 128) for `TVM`. +
+(SMPC: Scratch pad memory in R-Car)
+** Width and height are less than [126, 126]
+** Supported 8bit input -> 8bit output.
+** Bit width of summed value: 32bit (x32ch)
+
+* DSP
+** Supported input tensor dimension: [3, 5]
+** Supported output tensor dimension: [3, 5]
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** Make sure that the sum of `pooling_size` must be smaller than `0x800000`.
+** Only kernel dimensions 1, 2, and 3 are supported.
+** Regarding torch operator, `torch.nn.functional.adaptive_avg_pool2d` is supported.
+*** The input tensor dimension is only 4.

@@ -1,0 +1,89 @@
+:figure-caption!:
+
+= DKL Codegen
+
+This document describes how the DKL backend lowers Relay graphs to C++ DSP code and assigns DKL tensor registers and buffers.
+
+== Overview [[overview]]
+
+This TVM integration is implemented as an IRModule-at-a-time external codegen where all partitioned subgraphs are passed at a time. A brief explanation about this can be found in link:https://github.com/apache/tvm/blob/ab02979a86a44e0a4093760611c7f0ec6c6a86f7/src/relay/transforms/compiler_function_utils.h#L20-L54[relay/transforms/compiler_function_utils.h#L20-L54].
+The following diagram illustrates the codegen flow and it has several steps to lower Relay graphs to a runtime module:
+
+* Pattern Matching: Identify DKL executable ops and partition them into Relay subgraphs. The DKL pattern table is defined in `relay/op/contrib/rcardkl.py` and the patterns are under the assumption that FakeQuantizationToInteger is already applied.
+* `TensorInfo` Extraction: This step traverses a Relay function and extract basic information about each Relay node that is used in the codegen step such as tensor kinds, consumer expressions, and so forth.
+** `tensor_info.cc`, `tensor_info.h`
+* Codegen: Given the extracted tensor info, `CodegenDSP` traverses the Relay functions again and lowers them to C++ DSP code.
+** `codegen.cc`, `codegen.h`
+* Tensor Register Assignment: DKL tensor registers are assigned to each tensor in this step.
+** `tensor_reg_assign.cc`, `tensor_reg_assign.h`
+* Buffer Allocation Planning: Given the previous step's result, `PlanAllocation` assigns memory regions to each tensor.
+** `allocation_plan.cc`, `allocation_plan.h`
+* Native Compilation: Generated C++ code is compiled and linked against DKL by invoking the DSP specific toolchain.
+** `contrib/rcardkl/build.py`
+* Bundle Generation: All runtime information such as buffer allocations, tensor-register assignments, and so forth is "bundled" and serialized to binary protobuf data called `cl_bundle`.
+** `to_bundle.cc`, `to_bundle.h`
+* V4X Runtime Module Creation: Refer to xref:05_runtime-architecture.adoc[TVM R-Car IMP Codegen Backend Architecture] for more information.
+
+image::images/overview.svg[Overview of DKL Codegen]
+
+== Utility Functions and Custom Passes
+
+* partition_for_rcardkl()
+** Partitions the graph to offload operators to VDSP. Some of the configuration options for this are discussed below.
+* ReplaceNodesPass(config)(mod)
+** Replaces parts of the graph with other operators. Used for hooking custom operators into the graph. Refer to xref:../../07_AdvancedTopics/replace-nodes.adoc[Custom Node Replacement] for more information.
+
+== Configuration Options
+
+The DKL backend has several target options to configure its behavior. The target options are defined in `src/relay/backend/contrib/rcardkl/target.cc`.
+
+* `skip_concat` (for testing/debugging purposes)
+** Concat skipping can be disabled by setting this to `True`. The default value is `False`.
+* `enable_ssp` (for testing/debugging purposes)
+** Optimized/`ssp::` implementations are used when `enable_ssp=True`, which is the default value.
+* `debug_info`
+** If set to `True`, Prints various debug information in the generated code.
+* `dsp_core`
+** A list of DSP core numbers that can be used for data-level parallelization of DKL functions.
+* `save_artifacts`
+** Various compiler artifacts (e.g. generated C++ code, protobuf files) that are helpful for testing/debugging are saved to the specified directory.
+
+These options can be provided as follows:
+
+.Example of `rcardkl` target option
+[source,python id=target_option]
+----
+dkl_target = tvm.target.Target(
+    {
+        "kind": "rcardkl",
+        "save_artifacts": "./artifacts",
+        "dsp_core": [0, 1],
+    }
+)
+----
+
+== Configure Graph Partitioning
+
+`partition_for_rcardkl` has a couple of parameters that are basically intended to be used for testing/debugging purposes.
+
+* `merge_regions`
+** When this is set to `False`, subgraphs are created for each DKL op by not applying `MergeCompilerRegions`.
+* `include_reshape_ops` (deprecated)
+** Reshape operators can be kept un-partitioned by setting this to `False`.
+* `remove_qdq`
+** If True, removes Q + DQ and DQ + Q whose scales and zps match.
+* `skip_layers`
+** A list of nodes to exclude from offloading to the DSP. Used for testing/debugging purposes.
+
+From the performance point of view, `merge_regions=True` and `include_reshape_ops=True` should be used.
+
+CAUTION: `GraphExecutor` is supposed to convert un-partitioned reshape ops to NOPs but sometimes unexpected latencies have been observed.
+
+== Environment Variables
+
+The DKL code generator checks for the existence of the following environment variables:
+
+* TVM_RCAR_PROFILE
+** Setting it to any value enables the use of RPerf.
+* TVM_RCAR_PROFILE_DIR
+** When set to an existing path, additional information useful for profiling purposes will get saved to files in that directory for use by RPerf.

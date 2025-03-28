@@ -1,0 +1,17 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Sub[onnx opset 14], https://pytorch.org/docs/stable/generated/torch.sub.html[torch.sub].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Sub` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** FP32 operator only verified with stand-alone test case.
+** In `torch.sub`, `alpha` supports only `alpha = 1`, otherwise error is raised.

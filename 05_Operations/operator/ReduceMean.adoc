@@ -1,0 +1,24 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#ReduceMean[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.mean.html[torch.mean].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axes [7] |uint32 |[0, r-1] |r = rank(data)
+|keepdims |uint32 |0, 1 a| 0 means reduce all axes. +
+1 means keep reduced dimension.
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `ReduceMean` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** If inputs or outputs are non-dense, then fallback to the reference implementation.
+** The input / output shape must be not equal 0.
+** FP32 operator only verified with stand-alone test case.

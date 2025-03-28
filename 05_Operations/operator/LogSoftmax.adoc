@@ -1,0 +1,22 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#LogSoftmax[onnx opset 13], https://pytorch.org/docs/stable/generated/torch.nn.LogSoftmax.html[torch.nn.LogSoftmax].
+
+==== Attribute
+
+[width="100%", cols="^.^20%h,^.^15%,^.^15%,.^50%", options="header"]
+|===
+|*Attribute* |*DataType* |*Support* |*Note*
+
+|axis |uint8 |[0, r-1] |where r = rank(input).
+|===
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `LogSoftmax` operator.
+
+* DSP
+** Supported input tensor dimension: [1, 7]
+** Supported output tensor dimension: [1, 7]
+** If the following condition(s) are not satisfied, then fallback to the reference implementation.
+*** Both inputs and outputs are dense.
+*** Axis is the innermost dimension.

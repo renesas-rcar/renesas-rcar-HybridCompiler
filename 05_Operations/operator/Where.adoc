@@ -1,0 +1,18 @@
+HyCo supports https://github.com/onnx/onnx/blob/main/docs/Operators.md#Where[onnx opset 16], https://pytorch.org/docs/stable/generated/torch.where.html[torch.where].
+
+==== Attribute
+
+None.
+
+==== Restriction and Limitation
+
+* CNNIP
+** CNNIP does not support the `Where` operator.
+
+* DSP
+** Supported input tensor dimension: [0, 7].
+** Supported output tensor dimension: [0, 7].
+** Unlike the ONNX specification, Where does not support broadcast yet.
+** The dimension below is zero.
+*** `X_scale`, `X_zero`, `Y_scale`, `Y_zero`, `output_scale`, `output_zero` must.
+** Currently Where does not work correctly in environments where `bool` size greater than one.
